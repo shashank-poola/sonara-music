@@ -27,10 +27,10 @@ const PAGE_SIZE = 20;
 
 const CATEGORIES = [
   { key: "all", label: "All", query: DEFAULT_QUERY },
-  { key: "songs", label: "Songs", query: "trending songs" },
-  { key: "albums", label: "Album", query: "trending albums" },
-  { key: "artists", label: "Artists", query: "trending artists" },
-  { key: "playlists", label: "Playlists", query: "trending playlists" },
+  { key: "songs", label: "Songs", query: "Songs" },
+  { key: "albums", label: "Album", query: "Albums" },
+  { key: "artists", label: "Artists", query: "Artists" },
+  { key: "playlists", label: "Playlists", query: "Playlists" },
 ] as const;
 
 type CategoryKey = (typeof CATEGORIES)[number]["key"];
@@ -172,27 +172,25 @@ export default function HomeScreen() {
 
       {/* Category tabs */}
       <View style={styles.categoryRow}>
-        <View style={styles.categoryCapsule}>
-          {CATEGORIES.map((c) => {
-            const selected = c.key === activeCategory;
-            return (
-              <Pressable
-                key={c.key}
-                onPress={() => handleSelectCategory(c.key)}
-                style={({ pressed }) => [
-                  styles.categoryPill,
-                  selected && styles.categoryPillActive,
-                  pressed && styles.categoryPillPressed,
-                ]}
-                hitSlop={6}
-              >
-                <Text style={[styles.categoryText, selected && styles.categoryTextActive]}>
-                  {c.label}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </View>
+        {CATEGORIES.map((c) => {
+          const selected = c.key === activeCategory;
+          return (
+            <Pressable
+              key={c.key}
+              onPress={() => handleSelectCategory(c.key)}
+              style={({ pressed }) => [
+                styles.categoryPill,
+                selected && styles.categoryPillActive,
+                pressed && styles.categoryPillPressed,
+              ]}
+              hitSlop={6}
+            >
+              <Text style={[styles.categoryText, selected && styles.categoryTextActive]}>
+                {c.label}
+              </Text>
+            </Pressable>
+          );
+        })}
       </View>
 
       {/* Section header */}
@@ -269,33 +267,33 @@ const styles = StyleSheet.create({
     width: 112,
     height: 28,
   },
-  categoryRow: { paddingHorizontal: 16, paddingBottom: 12 },
-  categoryCapsule: {
+  categoryRow: {
+    paddingHorizontal: 16,
+    paddingBottom: 12,
     flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Colors.background.card,
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: Colors.border.primary,
-    padding: 4,
-    gap: 4,
+    flexWrap: "wrap",
+    gap: 10,
   },
   categoryPill: {
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 999,
+    backgroundColor: Colors.background.card,
+    borderWidth: 1,
+    borderColor: Colors.border.primary,
   },
   categoryPillActive: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Colors.button.primary,
+    borderColor: Colors.button.primary,
   },
   categoryPillPressed: { opacity: 0.75 },
   categoryText: {
     fontSize: 12,
     fontWeight: "700",
-    color: Colors.text.muted,
+    color: Colors.text.primary,
   },
   categoryTextActive: {
-    color: "#000000",
+    color: Colors.button.text,
   },
   sectionHeader: {
     flexDirection: "row",
@@ -305,7 +303,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "700",
     color: Colors.text.primary,
   },

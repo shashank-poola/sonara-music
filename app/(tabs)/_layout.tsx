@@ -26,30 +26,18 @@ function TabIcon({
   size: number;
 }) {
   const iconSize = Math.max(18, Math.floor(size * 0.92));
-  const iconColor = "#000000";
+  const iconColor = focused ? Colors.button.primary : Colors.text.primary;
 
-  return (
-    <View
-      style={{
-        width: 34,
-        height: 34,
-        borderRadius: 17,
-        backgroundColor: "#FFFFFF",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      {name === "home" ? (
-        <Octicons name={focused ? "home-fill" : "home"} size={iconSize} color={iconColor} />
-      ) : name === "search" ? (
-        <Ionicons name="search" size={iconSize} color={iconColor} />
-      ) : name === "playlists" ? (
-        <MaterialIcons name="my-library-music" size={iconSize} color={iconColor} />
-      ) : (
-        <Feather name="settings" size={iconSize} color={iconColor} />
-      )}
-    </View>
-  );
+  if (name === "home") {
+    return <Octicons name={focused ? "home-fill" : "home"} size={iconSize} color={iconColor} />;
+  }
+  if (name === "search") {
+    return <Ionicons name="search" size={iconSize} color={iconColor} />;
+  }
+  if (name === "playlists") {
+    return <MaterialIcons name="my-library-music" size={iconSize} color={iconColor} />;
+  }
+  return <Feather name="settings" size={iconSize} color={iconColor} />;
 }
 
 export default function TabLayout() {
@@ -61,14 +49,13 @@ export default function TabLayout() {
             headerShown: false,
             tabBarStyle: {
               backgroundColor: "#000000",
-              borderTopColor: Colors.border.primary,
-              borderTopWidth: 1,
+              borderTopWidth: 0,
               height: TAB_BAR_HEIGHT,
               paddingBottom: 10,
-              paddingTop: 8,
+              paddingTop: 10,
             },
-            tabBarActiveTintColor: "#FFFFFF",
-            tabBarInactiveTintColor: Colors.text.muted,
+            tabBarActiveTintColor: Colors.button.primary,
+            tabBarInactiveTintColor: Colors.text.primary,
             tabBarLabelStyle: { fontSize: 11, fontWeight: "600" },
           }}
         >

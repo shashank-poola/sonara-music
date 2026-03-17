@@ -31,7 +31,7 @@ export function MiniPlayer() {
         styles.container,
         { bottom: TAB_BAR_HEIGHT + insets.bottom },
       ]}
-      onPress={() => router.push("/player")}
+      onPress={() => router.push("/player" as never)}
     >
       {/* Progress line at top */}
       <View style={styles.progressTrack}>
@@ -106,6 +106,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     right: 0,
+    zIndex: 1000,
+    elevation: 20,
     backgroundColor: Colors.background.card,
     borderTopWidth: 1,
     borderTopColor: Colors.border.primary,

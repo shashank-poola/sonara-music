@@ -10,8 +10,9 @@ export const Colors = {
     player: "#1B2336",
   },
   button: {
-    primary: "#FACC15",
-    text: "#111827",
+    primary: "#FFB5FF",
+    secondary: "#09C3FF",
+    text: "#000000",
   },
   border: {
     primary: "#2A3347",
@@ -21,7 +22,7 @@ export const Colors = {
     error: "#EF4444",
   },
   player: {
-    progressActive: "#FACC15",
+    progressActive: "#FFB5FF",
     progressInactive: "#374151",
   },
 } as const;
