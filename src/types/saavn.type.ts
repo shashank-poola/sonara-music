@@ -218,3 +218,5 @@ export function formatDuration(seconds?: string | number): string {
   const sec = totalSec % 60;
   return `${m}:${sec.toString().padStart(2, "0")}`;
 }
+
+export type PaginationOpts = { page?: number; limit?: number };

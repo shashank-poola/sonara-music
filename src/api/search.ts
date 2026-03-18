@@ -1,13 +1,6 @@
 import { saavnGetJson } from "./client";
-import type {
-  SaavnSearchAllResponse,
-  SaavnSearchAlbumsResponse,
-  SaavnSearchArtistsResponse,
-  SaavnSearchPlaylistsResponse,
-  SaavnSearchSongsResponse,
-} from "@/types/saavn.type";
-
-type PaginationOpts = { page?: number; limit?: number };
+import type { SaavnSearchAllResponse, SaavnSearchAlbumsResponse, SaavnSearchArtistsResponse, SaavnSearchPlaylistsResponse, SaavnSearchSongsResponse } from "@/types/saavn.type";
+import { PaginationOpts } from "@/types/saavn.type";
 
 export function searchAll(query: string, opts?: PaginationOpts) {
   return saavnGetJson<SaavnSearchAllResponse>("/api/search", {

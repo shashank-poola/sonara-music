@@ -1,20 +1,9 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/theme";
-
-export const HOME_CATEGORIES = [
-  { key: "all", label: "All" },
-  { key: "songs", label: "Songs" },
-  { key: "albums", label: "Album" },
-  { key: "artists", label: "Artists" },
-  { key: "playlists", label: "Playlists" },
-] as const;
+import { HOME_CATEGORIES } from "@/types/utils.type";
+import { HomeCategoryPillsProps } from "@/types/home.type";
 
 export type HomeCategoryKey = (typeof HOME_CATEGORIES)[number]["key"];
-
-type HomeCategoryPillsProps = {
-  activeKey: HomeCategoryKey;
-  onSelect: (key: HomeCategoryKey) => void;
-};
 
 export function HomeCategoryPills({ activeKey, onSelect }: HomeCategoryPillsProps) {
   return (

@@ -4,14 +4,9 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/theme";
 import { pickBestImageUrl } from "@/types/saavn.type";
 import type { SaavnPlaylistResult } from "@/types/saavn.type";
+import { HomePlaylistCardProps } from "@/types/home.type";
 
 const CARD_SIZE = 140;
-
-type HomePlaylistCardProps = {
-  playlist: SaavnPlaylistResult;
-  variant: "horizontal" | "grid";
-  cardSize?: number;
-};
 
 export function HomePlaylistCard({ playlist, variant, cardSize = CARD_SIZE }: HomePlaylistCardProps) {
   const router = useRouter();

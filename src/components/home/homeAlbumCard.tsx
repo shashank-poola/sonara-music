@@ -3,16 +3,10 @@ import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/theme";
 import { pickBestImageUrl } from "@/types/saavn.type";
-import type { SaavnAlbumResult } from "@/types/saavn.type";
 import { getDisplayArtistForAlbum } from "@/utils/artistDisplay";
+import { HomeAlbumCardProps } from "@/types/home.type";
 
 const CARD_SIZE = 140;
-
-type HomeAlbumCardProps = {
-  album: SaavnAlbumResult;
-  variant: "horizontal" | "grid";
-  cardSize?: number;
-};
 
 export function HomeAlbumCard({ album, variant, cardSize = CARD_SIZE }: HomeAlbumCardProps) {
   const router = useRouter();

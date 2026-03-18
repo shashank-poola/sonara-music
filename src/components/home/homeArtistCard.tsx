@@ -3,15 +3,9 @@ import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/theme";
 import { pickBestImageUrl } from "@/types/saavn.type";
-import type { SaavnArtistResult } from "@/types/saavn.type";
+import { HomeArtistCardProps } from "@/types/home.type";
 
 const CARD_SIZE = 140;
-
-type HomeArtistCardProps = {
-  artist: SaavnArtistResult;
-  variant: "horizontal" | "grid";
-  cardSize?: number;
-};
 
 export function HomeArtistCard({ artist, variant, cardSize = CARD_SIZE }: HomeArtistCardProps) {
   const router = useRouter();

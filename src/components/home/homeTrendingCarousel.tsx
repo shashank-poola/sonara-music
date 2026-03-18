@@ -1,20 +1,14 @@
-import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
 import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/theme";
 import { pickBestImageUrl } from "@/types/saavn.type";
 import type { SaavnSongSearchResult } from "@/types/saavn.type";
 import { getDisplayArtist } from "@/utils/artistDisplay";
+import { HomeTrendingCarouselProps } from "@/types/home.type";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const CARD_WIDTH = Math.floor(SCREEN_WIDTH * 0.72);
 const CARD_GAP = 12;
-
-type HomeTrendingCarouselProps = {
-  songs: SaavnSongSearchResult[];
-  onPlaySong: (index: number) => void;
-};
 
 export function HomeTrendingCarousel({ songs, onPlaySong }: HomeTrendingCarouselProps) {
   if (songs.length === 0) return null;

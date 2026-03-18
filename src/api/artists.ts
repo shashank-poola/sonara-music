@@ -1,9 +1,5 @@
 import { saavnGetJson } from "./client";
-import type {
-  SaavnAlbumDetailsResponse,
-  SaavnArtistDetailsResponse,
-  SaavnArtistSongsResponse,
-} from "@/types/saavn.type";
+import type { SaavnAlbumDetailsResponse, SaavnArtistDetailsResponse, SaavnArtistSongsResponse } from "@/types/saavn.type";
 
 export function getArtistById(id: string) {
   return saavnGetJson<SaavnArtistDetailsResponse>(

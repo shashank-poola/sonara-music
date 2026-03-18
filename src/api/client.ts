@@ -1,4 +1,4 @@
-export const SAAVN_BASE_URL = "https://saavn.sumit.co";
+export const SAAVN_BASE_URL = process.env;
 
 export class SaavnApiError extends Error {
   readonly status?: number;

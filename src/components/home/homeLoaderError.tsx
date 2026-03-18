@@ -1,12 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/theme";
+import { HomeLoaderErrorProps } from "@/types/home.type";
 
-type HomeLoaderErrorProps = {
-  loading: boolean;
-  error: string | null;
-  onRetry: () => void;
-};
 
 export function HomeLoaderError({ loading, error, onRetry }: HomeLoaderErrorProps) {
   if (loading) {

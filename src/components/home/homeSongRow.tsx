@@ -5,14 +5,7 @@ import { Colors } from "@/constants/theme";
 import { formatDuration, pickBestImageUrl } from "@/types/saavn.type";
 import type { SaavnSongSearchResult } from "@/types/saavn.type";
 import { getDisplayArtist } from "@/utils/artistDisplay";
-
-type HomeSongRowProps = {
-  song: SaavnSongSearchResult;
-  index: number;
-  isActive: boolean;
-  isPlaying: boolean;
-  onPress: () => void;
-};
+import { HomeSongRowProps } from "@/types/home.type";
 
 export function HomeSongRow({ song, index, isActive, isPlaying, onPress }: HomeSongRowProps) {
   return (
