@@ -1,12 +1,28 @@
-# Sonara (Lokal)
+# Sonara - Music Player App
 
-A mobile music app built with Expo and React Native. Browse, search, and play music with a clean, modern interface.
+Sonara is a React Native music player built with Expo and TypeScript, powered by the JioSaavn API for real-time 
+song, album, artist, and playlist discovery. It features a polished dark UI, synchronized mini and full player 
+experience, search with debouncing, and a scalable architecture using React Navigation, Zustand, and local 
+persistence.
+
+## What Does This Do?
+
+---
+
+Sonara is a mobile music app where users can:
+
+- **Search** for songs, albums, artists, and playlists with real-time results
+- **Play music** with a mini player and full-screen player experience
+- **Browse** trending content on the home screen
+- **Create and manage** playlists and add songs to them
+- **Download** songs for offline listening
+- **Adjust settings** such as audio quality, data saver, and notifications
 
 ---
 
 ## Setup
 
-**Prerequisites:** Node.js 18+, npm or yarn
+**Prerequisites:** Node.js 18+, npm or yarn or bun 
 
 1. **Install dependencies**
 
@@ -22,7 +38,7 @@ A mobile music app built with Expo and React Native. Browse, search, and play mu
 3. **Run the app**
 
    ```bash
-   npm start
+   bun start
    ```
 
    Then press `a` for Android, `i` for iOS, or `w` for web.
@@ -32,7 +48,7 @@ A mobile music app built with Expo and React Native. Browse, search, and play mu
 ## Architecture
 
 - **Framework:** Expo (SDK 54) with React Native
-- **Routing:** Expo Router (file-based, stack + tabs)
+- **Routing:** React Navigation (file-based, stack + tabs)
 - **State:** Zustand stores for player, queue, playlists, and downloads
 - **Audio:** `expo-av` with a singleton `AudioService` that loads streams and drives playback
 - **API:** Thin client in `src/api/` calling a backend (search, songs, albums, artists, playlists)
@@ -62,14 +78,14 @@ src/
 
 ## Trade-offs
 
-| What | Choice | Why |
-|------|--------|-----|
-| **State** | Zustand | Lightweight, no boilerplate, works well outside React |
-| **Audio** | Singleton `AudioService` | One playback instance, shared across screens |
-| **API** | Backend proxy | Keeps API keys and logic server-side; app stays simple |
-| **Search** | Debounced (450ms) | Fewer requests while typing |
-| **Routing** | Expo Router | File-based, fits Expo, typed routes |
-| **No auth** | — | App assumes backend handles auth if needed |
+| What | Better | Trade-offs |
+|------|--------|------------|
+| **State** | Zustand is lightweight, minimal boilerplate, works outside React | Less ecosystem than Redux; no built-in devtools |
+| **Audio** | Single `AudioService` instance shared everywhere; no duplicate playback | Harder to test; global state can be tricky to mock |
+| **API** | Backend proxy keeps keys and logic server-side; app stays thin | Requires a running backend; no offline-first without extra work |
+| **Search** | Debounced (450ms) reduces API calls while typing | Slight delay before results appear |
+| **Routing** | Expo Router is file-based, typed, fits Expo well | Tied to Expo; less flexible than custom setup |
+| **Auth** | Backend can handle auth if needed | App has no built-in auth; assumes backend or future work |
 
 ---
 
