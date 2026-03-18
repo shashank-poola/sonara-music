@@ -1,11 +1,12 @@
 import { Image } from "expo-image";
 import { StyleSheet, View } from "react-native";
+import { LogoFull } from "@/constants/assets";
 
 export function HomeHeader() {
   return (
     <View style={styles.header}>
       <Image
-        source={require("../../../assets/sonara/sonaralogo.png")}
+        source={LogoFull}
         style={styles.logo}
         contentFit="contain"
       />

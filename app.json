@@ -9,21 +9,27 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.shashankpoola.sonara",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#000000",
         "foregroundImage": "./assets/sonara/logo.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "monochromeImage": "./assets/sonara/logo.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "permissions": [
         "android.permission.FOREGROUND_SERVICE",
-        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
-      ]
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ],
+      "package": "com.shashankpoola.sonara"
     },
     "web": {
       "output": "static",
@@ -31,7 +37,12 @@
     },
     "plugins": [
       "expo-router",
-      ["expo-av", { "microphonePermission": false }],
+      [
+        "expo-av",
+        {
+          "microphonePermission": false
+        }
+      ],
       [
         "expo-splash-screen",
         {
@@ -48,6 +59,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "d0a5fc82-023b-4e86-ad70-13f91d417d86"
+      }
     }
   }
 }

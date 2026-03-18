@@ -41,6 +41,12 @@ Sonara is a mobile music app where users can:
 
    Then press `a` for Android, `i` for iOS, or `w` for web.
 
+4. **EAS Build (APK/AAB)**
+
+   For `eas build`, the API URL is set in `eas.json` (preview/production profiles). The `.env` file is gitignored and not uploaded to EAS. To use a different API URL, edit the `env.EXPO_PUBLIC_BASE_API_URL` in `eas.json` or set it in the [EAS dashboard](https://expo.dev) under Project → Environment Variables.
+
+   If the app icon still shows the default after changes, run: `eas build --platform android --profile preview --clear-cache`
+
 ---
 
 ## Architecture
