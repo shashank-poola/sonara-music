@@ -7,6 +7,7 @@ import {
   FlatList,
   Modal,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -18,6 +19,7 @@ import { Colors } from "@/constants/theme";
 import { usePlaylistsStore } from "@/store/playlists-store";
 import { usePlayerStore } from "@/store/player-store";
 import { pickBestImageUrl } from "@/types/saavn.type";
+import { getDisplayArtist } from "@/utils/artistDisplay";
 
 export default function PlaylistsScreen() {
   const router = useRouter();
@@ -150,10 +152,13 @@ export default function PlaylistsScreen() {
           style={styles.addCurrentBtn}
           onPress={() => setShowAddTo(true)}
         >
-          <Ionicons name="add-circle" size={20} color={Colors.button.primary} />
-          <Text style={styles.addCurrentText}>
-            {`Add "${currentSong.name}" to playlist`}
-          </Text>
+          <Ionicons name="add-circle" size={24} color={Colors.button.primary} />
+          <View style={styles.addCurrentTextCol}>
+            <Text style={styles.addCurrentText}>Add to playlist</Text>
+            <Text style={styles.addCurrentSub} numberOfLines={1}>
+              {currentSong.name}
+            </Text>
+          </View>
         </Pressable>
       )}
 
@@ -198,43 +203,98 @@ export default function PlaylistsScreen() {
       <Modal
         visible={showAddTo}
         transparent
-        animationType="fade"
+        animationType="slide"
         onRequestClose={() => setShowAddTo(false)}
       >
         <Pressable
-          style={styles.modalOverlay}
+          style={styles.addToOverlay}
           onPress={() => setShowAddTo(false)}
         >
-          <Pressable style={styles.modalContent} onPress={(e) => e.stopPropagation()}>
-            <Text style={styles.modalTitle}>Add to playlist</Text>
+          <Pressable
+            style={styles.addToSheet}
+            onPress={(e) => e.stopPropagation()}
+          >
+            <View style={styles.addToHandle} />
+            <Text style={styles.addToTitle}>Add to playlist</Text>
+            {currentSong && (
+              <View style={styles.addToSongPreview}>
+                <Text style={styles.addToSongName} numberOfLines={1}>
+                  {currentSong.name}
+                </Text>
+                <Text style={styles.addToSongArtist} numberOfLines={1}>
+                  {getDisplayArtist(currentSong)}
+                </Text>
+              </View>
+            )}
             {playlists.length === 0 ? (
-              <Text style={styles.modalSubtext}>
-                Create a playlist first from the Playlists tab.
-              </Text>
+              <View style={styles.addToEmpty}>
+                <Ionicons
+                  name="musical-notes-outline"
+                  size={48}
+                  color={Colors.text.muted}
+                />
+                <Text style={styles.addToEmptyText}>No playlists yet</Text>
+                <Text style={styles.addToEmptySub}>
+                  Create a playlist first to add songs
+                </Text>
+                <Pressable
+                  style={styles.addToCreateBtn}
+                  onPress={() => {
+                    setShowAddTo(false);
+                    setNewName("");
+                    setShowCreate(true);
+                  }}
+                >
+                  <Text style={styles.addToCreateText}>Create Playlist</Text>
+                </Pressable>
+              </View>
             ) : (
-              <View style={styles.playlistList}>
+              <ScrollView
+                style={styles.addToPlaylistScroll}
+                showsVerticalScrollIndicator={false}
+              >
                 {playlists.map((p) => (
                   <Pressable
                     key={p.id}
                     style={({ pressed }) => [
-                      styles.playlistOption,
-                      pressed && styles.rowPressed,
+                      styles.addToPlaylistItem,
+                      pressed && styles.addToPlaylistItemPressed,
                     ]}
                     onPress={() => handleAddCurrentToPlaylist(p.id)}
                   >
-                    <Text style={styles.playlistOptionText}>{p.name}</Text>
-                    <Text style={styles.playlistOptionSub}>
-                      {p.songs.length} songs
-                    </Text>
+                    <View style={styles.addToPlaylistArt}>
+                      {p.songs[0] ? (
+                        <Image
+                          source={{ uri: pickBestImageUrl(p.songs[0].image, "150x150") }}
+                          style={StyleSheet.absoluteFill}
+                          contentFit="cover"
+                        />
+                      ) : (
+                        <Ionicons
+                          name="musical-notes"
+                          size={24}
+                          color={Colors.text.muted}
+                        />
+                      )}
+                    </View>
+                    <View style={styles.addToPlaylistMeta}>
+                      <Text style={styles.addToPlaylistName} numberOfLines={1}>
+                        {p.name}
+                      </Text>
+                      <Text style={styles.addToPlaylistCount}>
+                        {p.songs.length} songs
+                      </Text>
+                    </View>
+                    <Ionicons name="add-circle" size={24} color={Colors.button.primary} />
                   </Pressable>
                 ))}
-              </View>
+              </ScrollView>
             )}
             <Pressable
-              style={[styles.modalBtn, styles.modalBtnCancel]}
+              style={styles.addToCloseBtn}
               onPress={() => setShowAddTo(false)}
             >
-              <Text style={styles.modalBtnTextCancel}>Close</Text>
+              <Text style={styles.addToCloseText}>Cancel</Text>
             </Pressable>
           </Pressable>
         </Pressable>
@@ -341,17 +401,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
+    gap: 10,
     backgroundColor: Colors.background.card,
-    paddingVertical: 12,
-    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 14,
     borderWidth: 1,
     borderColor: Colors.border.primary,
   },
+  addCurrentTextCol: { flex: 1, gap: 2 },
   addCurrentText: {
-    fontSize: 13,
-    fontWeight: "600",
+    fontSize: 15,
+    fontWeight: "700",
     color: Colors.text.primary,
+  },
+  addCurrentSub: {
+    fontSize: 12,
+    color: Colors.text.muted,
   },
   modalOverlay: {
     flex: 1,
@@ -427,5 +493,124 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.text.muted,
     marginTop: 2,
+  },
+  addToOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "flex-end",
+  },
+  addToSheet: {
+    backgroundColor: Colors.background.card,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    paddingHorizontal: 20,
+    paddingBottom: 40,
+    maxHeight: "70%",
+    borderWidth: 1,
+    borderBottomWidth: 0,
+    borderColor: Colors.border.primary,
+  },
+  addToHandle: {
+    width: 40,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: Colors.text.muted,
+    alignSelf: "center",
+    marginTop: 12,
+    marginBottom: 16,
+  },
+  addToTitle: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: Colors.text.primary,
+    marginBottom: 12,
+  },
+  addToSongPreview: {
+    backgroundColor: Colors.background.app,
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: Colors.border.primary,
+  },
+  addToSongName: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: Colors.text.primary,
+  },
+  addToSongArtist: {
+    fontSize: 13,
+    color: Colors.text.muted,
+    marginTop: 4,
+  },
+  addToEmpty: {
+    alignItems: "center",
+    paddingVertical: 32,
+    gap: 12,
+  },
+  addToEmptyText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: Colors.text.primary,
+  },
+  addToEmptySub: {
+    fontSize: 14,
+    color: Colors.text.muted,
+  },
+  addToCreateBtn: {
+    marginTop: 8,
+    backgroundColor: Colors.button.primary,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 12,
+  },
+  addToCreateText: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: Colors.button.text,
+  },
+  addToPlaylistScroll: {
+    maxHeight: 280,
+    marginBottom: 16,
+  },
+  addToPlaylistItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 14,
+    gap: 14,
+    borderRadius: 12,
+    paddingHorizontal: 4,
+  },
+  addToPlaylistItemPressed: { opacity: 0.6 },
+  addToPlaylistArt: {
+    width: 48,
+    height: 48,
+    borderRadius: 10,
+    backgroundColor: Colors.background.app,
+    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  addToPlaylistMeta: { flex: 1 },
+  addToPlaylistName: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: Colors.text.primary,
+  },
+  addToPlaylistCount: {
+    fontSize: 13,
+    color: Colors.text.muted,
+    marginTop: 2,
+  },
+  addToCloseBtn: {
+    paddingVertical: 14,
+    alignItems: "center",
+    borderTopWidth: 1,
+    borderTopColor: Colors.border.primary,
+  },
+  addToCloseText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: Colors.text.primary,
   },
 });

@@ -98,7 +98,7 @@ export default function SettingsScreen() {
         </View>
 
         <View style={styles.banner}>
-          <View style={styles.bannerGradient}>
+          <View style={styles.bannerCard}>
             <Text style={styles.bannerTitle}>About Sonara</Text>
             <Text style={styles.bannerSub}>
               Your personal music companion. Stream millions of songs, create
@@ -232,9 +232,11 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginBottom: 24,
   },
-  bannerGradient: {
+  bannerCard: {
     padding: 20,
-    backgroundColor: "#7C3AED",
+    backgroundColor: Colors.background.card,
+    borderWidth: 1,
+    borderColor: Colors.border.primary,
   },
   bannerTitle: {
     fontSize: 18,

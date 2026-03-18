@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { Colors } from "@/constants/theme";
@@ -6,10 +6,10 @@ import { Colors } from "@/constants/theme";
 type PlayerSongInfoProps = {
   title: string;
   artist: string;
-  onLike?: () => void;
+  onAddToPlaylist?: () => void;
 };
 
-export function PlayerSongInfo({ title, artist, onLike }: PlayerSongInfoProps) {
+export function PlayerSongInfo({ title, artist, onAddToPlaylist }: PlayerSongInfoProps) {
   return (
     <View style={styles.songInfo}>
       <View style={styles.songInfoLeft}>
@@ -20,9 +20,9 @@ export function PlayerSongInfo({ title, artist, onLike }: PlayerSongInfoProps) {
           {artist}
         </Text>
       </View>
-      <Pressable onPress={onLike} hitSlop={8}>
-        <Ionicons
-          name="heart-outline"
+      <Pressable onPress={onAddToPlaylist} hitSlop={8}>
+        <MaterialIcons
+          name="queue-music"
           size={26}
           color={Colors.text.muted}
         />

@@ -37,6 +37,9 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const TRENDING_CARD_WIDTH = Math.floor(SCREEN_WIDTH * 0.72);
 const HORIZONTAL_CARD_SIZE = 140;
 const CARD_GAP = 12;
+const GRID_PADDING = 16;
+const NUM_COLUMNS = 2;
+const GRID_CARD_SIZE = Math.floor((SCREEN_WIDTH - GRID_PADDING * 2 - CARD_GAP) / NUM_COLUMNS);
 
 const CATEGORIES = [
   { key: "all", label: "All" },
@@ -165,6 +168,54 @@ export default function HomeScreen() {
     </Pressable>
   );
 
+  const renderGridAlbum = ({ item }: { item: SaavnAlbumResult }) => (
+    <Pressable style={styles.gridCard} onPress={() => router.push(`/album/${item.id}` as never)}>
+      <Image
+        source={{ uri: pickBestImageUrl(item.image, "300x300") }}
+        style={styles.gridArt}
+        contentFit="cover"
+      />
+      <Text style={styles.gridTitle} numberOfLines={2}>
+        {item.name}
+      </Text>
+      <Text style={styles.gridSub} numberOfLines={1}>
+        {getDisplayArtistForAlbum(item)}
+      </Text>
+    </Pressable>
+  );
+
+  const renderGridPlaylist = ({ item }: { item: SaavnPlaylistResult }) => (
+    <Pressable style={styles.gridCard} onPress={() => router.push(`/playlist/${item.id}` as never)}>
+      <Image
+        source={{ uri: pickBestImageUrl(item.image, "300x300") }}
+        style={styles.gridArt}
+        contentFit="cover"
+      />
+      <Text style={styles.gridTitle} numberOfLines={2}>
+        {item.name}
+      </Text>
+      <Text style={styles.gridSub} numberOfLines={1}>
+        {item.songCount ? `${item.songCount} songs` : item.language || "Playlist"}
+      </Text>
+    </Pressable>
+  );
+
+  const renderGridArtist = ({ item }: { item: SaavnArtistResult }) => (
+    <Pressable style={styles.gridCard} onPress={() => router.push(`/artist/${item.id}` as never)}>
+      <Image
+        source={{ uri: pickBestImageUrl(item.image, "300x300") }}
+        style={[styles.gridArt, styles.gridArtCircle]}
+        contentFit="cover"
+      />
+      <Text style={styles.gridTitle} numberOfLines={2}>
+        {item.name}
+      </Text>
+      <Text style={styles.gridSub} numberOfLines={1}>
+        {item.role || "Artist"}
+      </Text>
+    </Pressable>
+  );
+
   const renderHorizontalAlbum = ({ item }: { item: SaavnAlbumResult }) => (
     <Pressable style={styles.horizontalCard} onPress={() => router.push(`/album/${item.id}` as never)}>
       <Image
@@ -286,11 +337,6 @@ export default function HomeScreen() {
           style={styles.logoImage}
           contentFit="contain"
         />
-        <Ionicons
-          name="notifications-outline"
-          size={22}
-          color={Colors.text.secondary}
-        />
       </View>
 
       <View style={styles.categoryRow}>
@@ -344,59 +390,41 @@ export default function HomeScreen() {
           }
         />
       ) : showAlbumsOnly ? (
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
+        <FlatList
+          data={albums}
+          keyExtractor={(i) => i.id}
+          numColumns={NUM_COLUMNS}
+          key="albums"
+          ListHeaderComponent={<Text style={styles.sectionTitle}>Albums</Text>}
+          contentContainerStyle={styles.gridList}
+          columnWrapperStyle={styles.gridRow}
+          renderItem={renderGridAlbum}
           showsVerticalScrollIndicator={false}
-        >
-          <Text style={styles.sectionTitle}>Albums</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.horizontalList}
-          >
-            {albums.map((item) => (
-              <View key={item.id}>
-                {renderHorizontalAlbum({ item })}
-              </View>
-            ))}
-          </ScrollView>
-        </ScrollView>
+        />
       ) : showArtistsOnly ? (
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
+        <FlatList
+          data={artists}
+          keyExtractor={(i) => i.id}
+          numColumns={NUM_COLUMNS}
+          key="artists"
+          ListHeaderComponent={<Text style={styles.sectionTitle}>Artists</Text>}
+          contentContainerStyle={styles.gridList}
+          columnWrapperStyle={styles.gridRow}
+          renderItem={renderGridArtist}
           showsVerticalScrollIndicator={false}
-        >
-          <Text style={styles.sectionTitle}>Artists</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.horizontalList}
-          >
-            {artists.map((item) => (
-              <View key={item.id}>
-                {renderHorizontalArtist({ item })}
-              </View>
-            ))}
-          </ScrollView>
-        </ScrollView>
+        />
       ) : showPlaylistsOnly ? (
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
+        <FlatList
+          data={playlists}
+          keyExtractor={(i) => i.id}
+          numColumns={NUM_COLUMNS}
+          key="playlists"
+          ListHeaderComponent={<Text style={styles.sectionTitle}>Playlists</Text>}
+          contentContainerStyle={styles.gridList}
+          columnWrapperStyle={styles.gridRow}
+          renderItem={renderGridPlaylist}
           showsVerticalScrollIndicator={false}
-        >
-          <Text style={styles.sectionTitle}>Playlists</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.horizontalList}
-          >
-            {playlists.map((item) => (
-              <View key={item.id}>
-                {renderHorizontalPlaylist({ item })}
-              </View>
-            ))}
-          </ScrollView>
-        </ScrollView>
+        />
       ) : (
         <ScrollView
           contentContainerStyle={styles.mainScroll}
@@ -545,6 +573,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     gap: CARD_GAP,
     paddingBottom: 20,
+  },
+  gridList: { paddingHorizontal: 16, paddingBottom: 180 },
+  gridRow: { gap: CARD_GAP, marginBottom: CARD_GAP },
+  gridCard: { width: GRID_CARD_SIZE },
+  gridArt: {
+    width: GRID_CARD_SIZE,
+    height: GRID_CARD_SIZE,
+    borderRadius: 12,
+    backgroundColor: Colors.background.card,
+  },
+  gridArtCircle: { borderRadius: GRID_CARD_SIZE / 2 },
+  gridTitle: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: Colors.text.primary,
+    marginTop: 8,
+    maxWidth: GRID_CARD_SIZE,
+  },
+  gridSub: {
+    fontSize: 11,
+    color: Colors.text.muted,
+    marginTop: 2,
+    maxWidth: GRID_CARD_SIZE,
   },
   horizontalCard: { width: HORIZONTAL_CARD_SIZE },
   horizontalArt: {

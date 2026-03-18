@@ -42,15 +42,16 @@ export const useDownloadsStore = create<DownloadsState>()(
         if (!pickBestStreamUrl(song.downloadUrl)) {
           try {
             const res = await getSongById(song.id);
-            const full = res.data?.[0];
-            if (full) {
+            const full = Array.isArray(res.data) ? res.data[0] : res.data;
+            if (full?.downloadUrl) {
               songToUse = {
                 ...song,
                 downloadUrl: full.downloadUrl,
                 image: full.image ?? song.image,
               };
             }
-          } catch {
+          } catch (e) {
+            console.warn("[Downloads] getSongById failed:", e);
             return false;
           }
         }
@@ -64,14 +65,18 @@ export const useDownloadsStore = create<DownloadsState>()(
           const ext = url.includes(".mp4") ? "mp4" : "m4a";
           const localPath = `${DOWNLOADS_DIR}${song.id}.${ext}`;
 
-          await FileSystem.downloadAsync(url, localPath);
-          const next: DownloadedSong = { ...songToUse, localPath };
+          const result = await FileSystem.downloadAsync(url, localPath);
+          if (result.status !== 200) {
+            throw new Error(`Download failed: ${result.status}`);
+          }
+          const next: DownloadedSong = { ...songToUse, localPath: result.uri };
           set((s) => ({
             downloads: [...s.downloads.filter((d) => d.id !== song.id), next],
             isDownloading: null,
           }));
           return true;
-        } catch {
+        } catch (e) {
+          console.warn("[Downloads] download failed:", e);
           set({ isDownloading: null });
           return false;
         }

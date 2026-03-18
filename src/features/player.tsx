@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { PlayerAlbumArt } from "@/components/playerAlbumArt";
@@ -14,6 +14,7 @@ import { PlayerTabSwitcher } from "@/components/playerTabSwitcher";
 import { SeekBar } from "@/components/seekBar";
 import { Colors } from "@/constants/theme";
 import { audioService } from "@/services/audio-service";
+import { usePlaylistsStore } from "@/store/playlists-store";
 import { usePlayerStore } from "@/store/player-store";
 import { useQueueStore } from "@/store/queue-store";
 import { formatDuration, pickBestImageUrl } from "@/types/saavn.type";
@@ -24,8 +25,11 @@ import { Tab } from "@/types/player.type";
 export default function PlayerScreen() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<Tab>("player");
+  const [showAddToPlaylist, setShowAddToPlaylist] = useState(false);
 
   const currentSong = usePlayerStore((s) => s.currentSong);
+  const playlists = usePlaylistsStore((s) => s.playlists);
+  const addSongToPlaylist = usePlaylistsStore((s) => s.addSongToPlaylist);
   const isPlaying = usePlayerStore((s) => s.isPlaying);
   const isLoading = usePlayerStore((s) => s.isLoading);
   const position = usePlayerStore((s) => s.position);
@@ -70,6 +74,7 @@ export default function PlayerScreen() {
           <PlayerSongInfo
             title={currentSong.name}
             artist={getDisplayArtist(currentSong)}
+            onAddToPlaylist={() => setShowAddToPlaylist(true)}
           />
           <View style={styles.seekSection}>
             <SeekBar
@@ -110,6 +115,54 @@ export default function PlayerScreen() {
           }}
         />
       )}
+
+      <Modal
+        visible={showAddToPlaylist}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowAddToPlaylist(false)}
+      >
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={() => setShowAddToPlaylist(false)}
+        >
+          <Pressable style={styles.modalContent} onPress={(e) => e.stopPropagation()}>
+            <Text style={styles.modalTitle}>Add to playlist</Text>
+            {playlists.length === 0 ? (
+              <Text style={styles.modalSubtext}>
+                Create a playlist first from the Playlists tab.
+              </Text>
+            ) : (
+              <View style={styles.playlistList}>
+                {playlists.map((p) => (
+                  <Pressable
+                    key={p.id}
+                    style={({ pressed }) => [
+                      styles.playlistOption,
+                      pressed && styles.playlistOptionPressed,
+                    ]}
+                    onPress={() => {
+                      if (currentSong) {
+                        addSongToPlaylist(p.id, currentSong);
+                        setShowAddToPlaylist(false);
+                      }
+                    }}
+                  >
+                    <Text style={styles.playlistOptionText}>{p.name}</Text>
+                    <Text style={styles.playlistOptionSub}>{p.songs.length} songs</Text>
+                  </Pressable>
+                ))}
+              </View>
+            )}
+            <Pressable
+              style={styles.modalCloseBtn}
+              onPress={() => setShowAddToPlaylist(false)}
+            >
+              <Text style={styles.modalCloseText}>Close</Text>
+            </Pressable>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -124,4 +177,59 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   timeText: { fontSize: 12, color: Colors.text.muted },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 24,
+  },
+  modalContent: {
+    width: "100%",
+    maxWidth: 340,
+    backgroundColor: Colors.background.card,
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: Colors.border.primary,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: Colors.text.primary,
+    marginBottom: 16,
+  },
+  modalSubtext: {
+    fontSize: 14,
+    color: Colors.text.muted,
+    marginBottom: 16,
+  },
+  playlistList: { marginBottom: 16, maxHeight: 240 },
+  playlistOption: {
+    paddingVertical: 14,
+    paddingHorizontal: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border.primary,
+  },
+  playlistOptionPressed: { opacity: 0.6 },
+  playlistOptionText: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: Colors.text.primary,
+  },
+  playlistOptionSub: {
+    fontSize: 12,
+    color: Colors.text.muted,
+    marginTop: 2,
+  },
+  modalCloseBtn: {
+    paddingVertical: 12,
+    paddingHorizontal: 4,
+    alignItems: "center",
+  },
+  modalCloseText: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: Colors.text.primary,
+  },
 });
