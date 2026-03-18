@@ -92,6 +92,7 @@ export type SaavnAlbumDetails = {
   language?: string;
   image?: SaavnImage[];
   primaryArtists?: string;
+  artists?: { primary?: { id: string; name: string }[] };
   songs?: SaavnSongDetails[];
 };
 

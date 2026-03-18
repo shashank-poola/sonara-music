@@ -1,4 +1,5 @@
 import { Audio, type AVPlaybackStatus } from "expo-av";
+import { useDownloadsStore } from "@/store/downloads-store";
 import { usePlayerStore } from "@/store/player-store";
 import { useQueueStore } from "@/store/queue-store";
 import { pickBestStreamUrl } from "@/types/saavn.type";
@@ -59,8 +60,9 @@ class AudioService {
         }
       }
 
-      const streamUrl = pickBestStreamUrl(songToPlay.downloadUrl);
-      if (!streamUrl) {
+      const localPath = useDownloadsStore.getState().getDownloadPath(song.id);
+      const playUri = localPath ?? pickBestStreamUrl(songToPlay.downloadUrl);
+      if (!playUri) {
         console.error("[AudioService] No stream URL for:", song.name);
         setIsLoading(false);
         setIsPlaying(false);
@@ -68,7 +70,7 @@ class AudioService {
       }
 
       const { sound } = await Audio.Sound.createAsync(
-        { uri: streamUrl },
+        { uri: playUri },
         { shouldPlay: true, progressUpdateIntervalMillis: 500 },
         this.onStatus
       );

@@ -95,7 +95,10 @@ export default function PlayerScreen() {
             onShuffle={toggleShuffle}
             onRepeat={cycleRepeat}
           />
-          <PlayerExtraRow onShowQueue={() => setActiveTab("queue")} />
+          <PlayerExtraRow
+            currentSong={currentSong}
+            onShowQueue={() => setActiveTab("queue")}
+          />
         </ScrollView>
       ) : (
         <PlayerQueueList

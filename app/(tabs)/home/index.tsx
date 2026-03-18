@@ -280,7 +280,6 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
-      {/* Header */}
       <View style={styles.header}>
         <Image
           source={require("../../../assets/sonara/sonaralogo.png")}
@@ -294,7 +293,6 @@ export default function HomeScreen() {
         />
       </View>
 
-      {/* Category pills */}
       <View style={styles.categoryRow}>
         {CATEGORIES.map((c) => {
           const selected = c.key === activeCategory;
@@ -404,7 +402,6 @@ export default function HomeScreen() {
           contentContainerStyle={styles.mainScroll}
           showsVerticalScrollIndicator={false}
         >
-          {/* Trending - big posters */}
           {trendingSongs.length > 0 && (
             <>
               <Text style={styles.sectionTitle}>Popular & Trending</Text>
@@ -426,7 +423,6 @@ export default function HomeScreen() {
             </>
           )}
 
-          {/* Albums - horizontal rounded cards */}
           {albums.length > 0 && (
             <>
               <Text style={styles.sectionTitle}>Albums</Text>
@@ -444,7 +440,6 @@ export default function HomeScreen() {
             </>
           )}
 
-          {/* Playlists - horizontal */}
           {playlists.length > 0 && (
             <>
               <Text style={styles.sectionTitle}>Playlists</Text>
@@ -462,7 +457,6 @@ export default function HomeScreen() {
             </>
           )}
 
-          {/* All Songs - vertical list */}
           {allSongs.length > 0 && (
             <>
               <Text style={styles.sectionTitle}>All Songs</Text>
@@ -488,10 +482,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 20,
+    paddingHorizontal: 0,
     paddingVertical: 14,
   },
-  logoImage: { width: 112, height: 28 },
+  logoImage: { width: 140, height: 35 },
   categoryRow: {
     paddingHorizontal: 16,
     paddingBottom: 12,
@@ -514,20 +508,17 @@ const styles = StyleSheet.create({
   categoryPillPressed: { opacity: 0.75 },
   categoryText: { fontSize: 12, fontWeight: "700", color: Colors.text.primary },
   categoryTextActive: { color: Colors.button.text },
-
   sectionTitle: {
     fontSize: 20,
     fontWeight: "700",
     color: Colors.text.primary,
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     marginBottom: 12,
   },
-
   mainScroll: { paddingBottom: 180 },
   scrollContent: { paddingBottom: 180 },
-
   trendingList: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     gap: CARD_GAP,
     paddingBottom: 20,
   },
@@ -539,10 +530,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     backgroundColor: Colors.background.card,
   },
-  trendingArt: {
-    width: "100%",
-    height: "100%",
-  },
+  trendingArt: { width: "100%", height: "100%" },
   trendingOverlay: {
     position: "absolute",
     bottom: 0,
@@ -553,9 +541,8 @@ const styles = StyleSheet.create({
   },
   trendingTitle: { fontSize: 16, fontWeight: "700", color: "#FFF" },
   trendingArtist: { fontSize: 13, color: Colors.text.muted, marginTop: 2 },
-
   horizontalList: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     gap: CARD_GAP,
     paddingBottom: 20,
   },
@@ -580,7 +567,6 @@ const styles = StyleSheet.create({
     marginTop: 2,
     maxWidth: HORIZONTAL_CARD_SIZE,
   },
-
   songsSection: { paddingHorizontal: 16, paddingBottom: 20 },
   list: { paddingHorizontal: 16, paddingBottom: 180 },
   songRow: {
@@ -617,7 +603,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.border.primary,
     opacity: 0.4,
   },
-
   loaderBox: {
     flex: 1,
     alignItems: "center",

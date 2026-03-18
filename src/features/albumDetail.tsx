@@ -130,7 +130,9 @@ export function AlbumDetailScreen({ albumId }: AlbumDetailScreenProps) {
           />
           <Text style={styles.title}>{album.name}</Text>
           <Text style={styles.artist}>
-            {album.primaryArtists || "Album"}
+            {album.primaryArtists ||
+              album.artists?.primary?.map((a) => a.name).join(", ") ||
+              "Album"}
           </Text>
         </View>
 
