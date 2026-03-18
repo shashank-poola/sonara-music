@@ -1,13 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-
+import { PlayerHeaderProps } from "@/types/player.type";
 import { Colors } from "@/constants/theme";
 
-type PlayerHeaderProps = {
-  albumName?: string;
-  onBack: () => void;
-  onMore?: () => void;
-};
 
 export function PlayerHeader({ albumName, onBack, onMore }: PlayerHeaderProps) {
   return (

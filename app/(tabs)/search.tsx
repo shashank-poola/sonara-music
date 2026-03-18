@@ -13,7 +13,8 @@ import { useSearch, type SearchTab } from "@/hooks/useSearch";
 import { usePlayerStore } from "@/store/player-store";
 import { useQueueStore } from "@/store/queue-store";
 import type { SaavnAlbumResult, SaavnArtistResult, SaavnPlaylistResult, SaavnSongSearchResult } from "@/types/saavn.type";
-import type { SearchResultItem, SEARCH_TABS } from "@/types/search.type";
+import type { SearchResultItem } from "@/types/search.type";
+import { SEARCH_TABS } from "@/types/search.type";
 
 
 export default function SearchScreen() {

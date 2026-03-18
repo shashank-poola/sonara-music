@@ -7,7 +7,7 @@ import { PlayerAlbumArt } from "@/components/playerAlbumArt";
 import { PlayerControls } from "@/components/playerControls";
 import { PlayerEmptyState } from "@/components/playerEmptyState";
 import { PlayerExtraRow } from "@/components/playerExtraRow";
-import { PlayerHeader } from "@/components/playerHeader";
+import { PlayerHeader } from "@/components/player/playerHeader";
 import { PlayerQueueList } from "@/components/playerQueueList";
 import { PlayerSongInfo } from "@/components/playerSongInfo";
 import { PlayerTabSwitcher } from "@/components/playerTabSwitcher";
@@ -18,8 +18,8 @@ import { usePlayerStore } from "@/store/player-store";
 import { useQueueStore } from "@/store/queue-store";
 import { formatDuration, pickBestImageUrl } from "@/types/saavn.type";
 import { getDisplayArtist } from "@/utils/artistDisplay";
+import { Tab } from "@/types/player.type";
 
-type Tab = "player" | "queue";
 
 export default function PlayerScreen() {
   const router = useRouter();
