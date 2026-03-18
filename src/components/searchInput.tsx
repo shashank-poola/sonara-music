@@ -1,13 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
-
 import { Colors } from "@/constants/theme";
-
-type SearchInputProps = {
-  value: string;
-  onChangeText: (text: string) => void;
-  placeholder?: string;
-};
+import { SearchInputProps } from "@/types/search.type";
 
 export function SearchInput({
   value,

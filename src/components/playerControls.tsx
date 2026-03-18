@@ -1,21 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, View } from "react-native";
-
+import { RepeatMode, PlayerControlsProps } from "@/types/player.type";
 import { Colors } from "@/constants/theme";
-
-type RepeatMode = "off" | "one" | "all";
-
-type PlayerControlsProps = {
-  isPlaying: boolean;
-  isLoading: boolean;
-  shuffleMode: boolean;
-  repeatMode: RepeatMode;
-  onTogglePlay: () => void;
-  onPrev: () => void;
-  onNext: () => void;
-  onShuffle: () => void;
-  onRepeat: () => void;
-};
 
 export function PlayerControls({
   isPlaying,

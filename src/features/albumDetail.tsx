@@ -2,26 +2,17 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import { getAlbumById } from "@/api/albums";
 import { Colors } from "@/constants/theme";
 import { usePlayerStore } from "@/store/player-store";
 import { useQueueStore } from "@/store/queue-store";
-import {
-  formatDuration,
-  pickBestImageUrl,
+import { formatDuration, pickBestImageUrl,
   type SaavnAlbumDetails,
   type SaavnSongDetails,
 } from "@/types/saavn.type";
+import { AlbumDetailScreenProps } from "@/types/utils.type";
 
 function songToSearchResult(s: SaavnSongDetails) {
   return {
@@ -34,10 +25,6 @@ function songToSearchResult(s: SaavnSongDetails) {
     album: s.album,
   };
 }
-
-type AlbumDetailScreenProps = {
-  albumId: string;
-};
 
 export function AlbumDetailScreen({ albumId }: AlbumDetailScreenProps) {
   const router = useRouter();

@@ -1,20 +1,9 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-
 import { Colors } from "@/constants/theme";
+import { Tab } from "@/types/player.type";
+import { PlayerTabSwitcherProps } from "@/types/player.type";
 
-type Tab = "player" | "queue";
-
-type PlayerTabSwitcherProps = {
-  activeTab: Tab;
-  queueCount: number;
-  onTabChange: (tab: Tab) => void;
-};
-
-export function PlayerTabSwitcher({
-  activeTab,
-  queueCount,
-  onTabChange,
-}: PlayerTabSwitcherProps) {
+export function PlayerTabSwitcher({ activeTab, queueCount, onTabChange }: PlayerTabSwitcherProps) {
   return (
     <View style={styles.tabRow}>
       <Pressable

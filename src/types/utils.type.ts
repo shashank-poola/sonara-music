@@ -17,3 +17,17 @@ export const HOME_CATEGORIES = [
     { key: "artists", label: "Artists" },
     { key: "playlists", label: "Playlists" },
 ] as const;
+
+export interface SeekBarProps {
+    position: number; // ms
+    duration: number; // ms
+    onSeek: (ms: number) => void;
+    trackHeight?: number;
+    thumbSize?: number;
+    fillColor?: string;
+    trackColor?: string;
+}
+
+export type AlbumDetailScreenProps = {
+    albumId: string;
+};

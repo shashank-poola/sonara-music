@@ -1,12 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import { PlayerEmptyStateProps } from "@/types/player.type";
 import { Colors } from "@/constants/theme";
-
-type PlayerEmptyStateProps = {
-  onBack: () => void;
-};
 
 export function PlayerEmptyState({ onBack }: PlayerEmptyStateProps) {
   return (

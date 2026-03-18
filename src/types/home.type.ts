@@ -45,3 +45,14 @@ export type HomeTrendingCarouselProps = {
     songs: SaavnSongSearchResult[];
     onPlaySong: (index: number) => void;
 };
+
+export type CategoryTab = {
+    key: string;
+    label: string;
+  };
+  
+export type CategoryPillsProps = {
+    tabs: CategoryTab[];
+    activeKey: string;
+    onSelect: (key: string) => void;
+};

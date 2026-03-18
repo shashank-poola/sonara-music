@@ -1,11 +1,7 @@
 import { Image } from "expo-image";
 import { StyleSheet, View } from "react-native";
-
 import { Colors } from "@/constants/theme";
-
-type PlayerAlbumArtProps = {
-  imageUri: string | undefined;
-};
+import { PlayerAlbumArtProps } from "@/types/player.type";
 
 export function PlayerAlbumArt({ imageUri }: PlayerAlbumArtProps) {
   if (!imageUri) return null;

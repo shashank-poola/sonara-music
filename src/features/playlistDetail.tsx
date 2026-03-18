@@ -2,21 +2,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import { getPlaylistById } from "@/api/playlists";
 import { Colors } from "@/constants/theme";
 import { usePlaylistsStore } from "@/store/playlists-store";
 import { usePlayerStore } from "@/store/player-store";
 import { useQueueStore } from "@/store/queue-store";
+import { PlaylistDetailScreenProps, PlaylistData } from "@/types/playlists.type";
 import {
   formatDuration,
   pickBestImageUrl,
@@ -34,16 +27,6 @@ function songToSearchResult(s: SaavnSongDetails) {
     album: s.album,
   };
 }
-
-type PlaylistDetailScreenProps = {
-  playlistId: string;
-};
-
-type PlaylistData = {
-  name: string;
-  songs: SaavnSongDetails[];
-  coverUrl?: string;
-};
 
 export function PlaylistDetailScreen({ playlistId }: PlaylistDetailScreenProps) {
   const router = useRouter();

@@ -1,15 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Alert, Pressable, Share, StyleSheet, Text, View } from "react-native";
-
+import { PlayerExtraRowProps } from "@/types/player.type";
 import { Colors } from "@/constants/theme";
 import { useDownloadsStore } from "@/store/downloads-store";
-import type { SaavnSongSearchResult } from "@/types/saavn.type";
 import { getDisplayArtist } from "@/utils/artistDisplay";
-
-type PlayerExtraRowProps = {
-  currentSong: SaavnSongSearchResult | null;
-  onShowQueue: () => void;
-};
 
 export function PlayerExtraRow({ currentSong, onShowQueue }: PlayerExtraRowProps) {
   const addDownload = useDownloadsStore((s) => s.addDownload);

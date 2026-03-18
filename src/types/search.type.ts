@@ -25,3 +25,14 @@ export const BROWSE_ITEMS = [
     { label: "Artists", icon: "mic" as const },
     { label: "Playlists", icon: "folder-open" as const },
 ];
+
+export type SearchInputProps = {
+    value: string;
+    onChangeText: (text: string) => void;
+    placeholder?: string;
+};
+
+export type SongRowProps = {
+    song: SaavnSongSearchResult;
+    onPress: () => void;
+};

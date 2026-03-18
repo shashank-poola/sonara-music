@@ -1,17 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/theme";
-
-
-export type CategoryTab = {
-  key: string;
-  label: string;
-};
-
-type CategoryPillsProps = {
-  tabs: CategoryTab[];
-  activeKey: string;
-  onSelect: (key: string) => void;
-};
+import { CategoryTab, CategoryPillsProps } from "@/types/home.type";
 
 export function CategoryPills({ tabs, activeKey, onSelect }: CategoryPillsProps) {
   return (

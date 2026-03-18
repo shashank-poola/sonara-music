@@ -1,16 +1,7 @@
 import { useRef, useState } from "react";
 import { PanResponder, StyleSheet, View } from "react-native";
 import { Colors } from "@/constants/theme";
-
-interface SeekBarProps {
-  position: number; // ms
-  duration: number; // ms
-  onSeek: (ms: number) => void;
-  trackHeight?: number;
-  thumbSize?: number;
-  fillColor?: string;
-  trackColor?: string;
-}
+import { SeekBarProps } from "@/types/utils.type";
 
 function clamp(v: number, min: number, max: number) {
   return Math.max(min, Math.min(max, v));

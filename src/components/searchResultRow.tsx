@@ -1,21 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-
 import { Colors } from "@/constants/theme";
 import { formatDuration, pickBestImageUrl } from "@/types/saavn.type";
 import { getDisplayArtist, getDisplayArtistForAlbum } from "@/utils/artistDisplay";
-import type {
-  SaavnAlbumResult,
-  SaavnArtistResult,
-  SaavnPlaylistResult,
-  SaavnSongSearchResult,
-} from "@/types/saavn.type";
-
-type SongRowProps = {
-  song: SaavnSongSearchResult;
-  onPress: () => void;
-};
+import type { SaavnAlbumResult, SaavnArtistResult, SaavnPlaylistResult, SaavnSongSearchResult } from "@/types/saavn.type";
+import { SongRowProps } from "@/types/search.type";
 
 export function SearchSongRow({ song, onPress }: SongRowProps) {
   return (

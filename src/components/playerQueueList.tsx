@@ -1,25 +1,15 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-
 import { Colors } from "@/constants/theme";
 import { usePlayerStore } from "@/store/player-store";
 import { useQueueStore } from "@/store/queue-store";
 import { pickBestImageUrl } from "@/types/saavn.type";
 import { getDisplayArtist } from "@/utils/artistDisplay";
 import type { SaavnSongSearchResult } from "@/types/saavn.type";
+import { PlayerQueueListProps } from "@/types/player.type";
 
-type PlayerQueueListProps = {
-  queue: SaavnSongSearchResult[];
-  currentIndex: number;
-  onSelectSong: (index: number, song: SaavnSongSearchResult) => void;
-};
-
-export function PlayerQueueList({
-  queue,
-  currentIndex,
-  onSelectSong,
-}: PlayerQueueListProps) {
+export function PlayerQueueList({ queue, currentIndex, onSelectSong }: PlayerQueueListProps) {
   const isPlaying = usePlayerStore((s) => s.isPlaying);
   const removeFromQueue = useQueueStore((s) => s.removeFromQueue);
 

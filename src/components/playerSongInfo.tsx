@@ -1,13 +1,7 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-
 import { Colors } from "@/constants/theme";
-
-type PlayerSongInfoProps = {
-  title: string;
-  artist: string;
-  onAddToPlaylist?: () => void;
-};
+import { PlayerSongInfoProps } from "@/types/player.type";
 
 export function PlayerSongInfo({ title, artist, onAddToPlaylist }: PlayerSongInfoProps) {
   return (

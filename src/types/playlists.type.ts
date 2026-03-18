@@ -1,5 +1,6 @@
 import { SaavnSongSearchResult } from "./saavn.type";
 import { UserPlaylist } from "@/store/playlists-store";
+import { SaavnSongDetails } from "./saavn.type";
 
 export type AddToPlaylistButtonProps = {
     currentSong: SaavnSongSearchResult;
@@ -34,4 +35,14 @@ export type PlaylistsHeaderProps = {
 export type PlaylistsRowProps = {
     playlist: UserPlaylist;
     onDelete: () => void;
+};
+
+export type PlaylistDetailScreenProps = {
+    playlistId: string;
+};
+  
+export type PlaylistData = {
+    name: string;
+    songs: SaavnSongDetails[];
+    coverUrl?: string;
 };
