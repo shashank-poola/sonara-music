@@ -8,7 +8,7 @@ export function SettingsFooter() {
   return (
     <Pressable
       style={styles.footerBtn}
-      onPress={() => router.replace("/(tabs)/home/index")}
+      onPress={() => router.replace("/(tabs)/home")}
     >
       <Text style={styles.footerBtnText}>Explore Sonara</Text>
     </Pressable>

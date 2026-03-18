@@ -88,8 +88,15 @@ export default function HomeScreen() {
         setArtists([]);
         setPlaylists([]);
       } else if (key === "artists") {
-        const res = await searchArtists("trending", { page: 1, limit: 30 });
-        setArtists(res.data?.results ?? []);
+        const res = await searchArtists("popular artists", { page: 1, limit: 30 });
+        const raw = res.data?.results ?? [];
+        const filtered = raw.filter(
+          (a) =>
+            a.name &&
+            !a.name.startsWith("#") &&
+            a.name.toLowerCase() !== "trending"
+        );
+        setArtists(filtered);
         setTrendingSongs([]);
         setAlbums([]);
         setAllSongs([]);
@@ -191,9 +198,14 @@ export default function HomeScreen() {
           contentContainerStyle={styles.gridList}
           columnWrapperStyle={styles.gridRow}
           renderItem={({ item }) => (
-            <HomeArtistCard artist={item} variant="grid" />
+            <HomeArtistCard artist={item} variant="grid" cardSize={GRID_CARD_SIZE} />
           )}
           showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <View style={styles.emptyBox}>
+              <Text style={styles.emptyText}>No artists found</Text>
+            </View>
+          }
         />
       ) : showPlaylistsOnly ? (
         <FlatList

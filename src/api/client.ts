@@ -1,4 +1,5 @@
-export const SAAVN_BASE_URL = process.env;
+const base = process.env.EXPO_PUBLIC_BASE_API_URL ?? "";
+export const SAAVN_BASE_URL = base.endsWith("/") ? base.slice(0, -1) : base;
 
 export class SaavnApiError extends Error {
   readonly status?: number;

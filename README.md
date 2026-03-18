@@ -7,8 +7,6 @@ persistence.
 
 ## What Does This Do?
 
----
-
 Sonara is a mobile music app where users can:
 
 - **Search** for songs, albums, artists, and playlists with real-time results
