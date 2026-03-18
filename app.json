@@ -38,9 +38,9 @@
           "image": "./assets/sonara/logo.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#000000",
+          "backgroundColor": "#FFD0FF",
           "dark": {
-            "backgroundColor": "#000000"
+            "backgroundColor": "#FFD0FF"
           }
         }
       ]

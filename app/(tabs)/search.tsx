@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { CategoryPills } from "@/components/categoryPills";
 import { SearchAlbumRow, SearchArtistRow, SearchPlaylistRow, SearchSongRow } from "@/components/searchResultRow";
+import { SearchBrowseGrid } from "@/components/search/searchBrowseGrid";
 import { SearchEmptyState } from "@/components/search/searchEmptyState";
 import { SearchInput } from "@/components/searchInput";
 import { Colors } from "@/constants/theme";
@@ -127,17 +128,16 @@ export default function SearchScreen() {
 
       <SearchInput value={query} onChangeText={setQuery} />
 
-      <CategoryPills
-        tabs={SEARCH_TABS}
-        activeKey={activeTab}
-        onSelect={(k) => setActiveTab(k as SearchTab)}
-      />
+      {debouncedQuery ? (
+        <CategoryPills
+          tabs={SEARCH_TABS}
+          activeKey={activeTab}
+          onSelect={(k) => setActiveTab(k as SearchTab)}
+        />
+      ) : null}
 
       {!debouncedQuery ? (
-        <SearchEmptyState
-          title="Start searching"
-          body="Find songs, albums, artists, and playlists."
-        />
+        <SearchBrowseGrid />
       ) : loading ? (
         <View style={styles.loader}>
           <ActivityIndicator color={Colors.button.primary} />
