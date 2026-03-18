@@ -3,7 +3,6 @@ import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/theme";
-import type { UserPlaylist } from "@/store/playlists-store";
 import { pickBestImageUrl } from "@/types/saavn.type";
 import { PlaylistsRowProps } from "@/types/playlists.type";
 

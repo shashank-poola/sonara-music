@@ -2,7 +2,6 @@ import { StyleSheet, Text, View } from "react-native";
 import { SearchEmptyStateProps } from "@/types/search.type";
 import { Colors } from "@/constants/theme";
 
-
 export function SearchEmptyState({ title, body }: SearchEmptyStateProps) {
   return (
     <View style={styles.empty}>

@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
+import { BROWSE_ITEMS } from "@/types/search.type";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const GRID_PADDING = 16;
@@ -7,13 +8,6 @@ const GRID_GAP = 12;
 const NUM_COLUMNS = 2;
 const HORIZONTAL_SPACE = GRID_PADDING * 2 + GRID_GAP;
 const TILE_SIZE = Math.floor((SCREEN_WIDTH - HORIZONTAL_SPACE) / NUM_COLUMNS);
-
-const BROWSE_ITEMS = [
-  { label: "Songs", icon: "musical-notes" as const },
-  { label: "Albums", icon: "disc" as const },
-  { label: "Artists", icon: "mic" as const },
-  { label: "Playlists", icon: "folder-open" as const },
-];
 
 const TILE_BG = "#F9E4F5";
 const TEXT_ICON_COLOR = "#000000";

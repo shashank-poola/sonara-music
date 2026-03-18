@@ -1,26 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Switch, Text, View } from "react-native";
 import { Colors } from "@/constants/theme";
+import { SettingsRowProps } from "@/types/utils.type";
 
-type SettingsRowProps = {
-  icon: React.ReactNode;
-  label: string;
-  value?: string;
-  toggle?: boolean;
-  toggled?: boolean;
-  onToggle?: (v: boolean) => void;
-  onPress?: () => void;
-};
-
-export function SettingsRow({
-  icon,
-  label,
-  value,
-  toggle,
-  toggled,
-  onToggle,
-  onPress,
-}: SettingsRowProps) {
+export function SettingsRow({ icon, label, value, toggle, toggled, onToggle, onPress }: SettingsRowProps) {
   const content = (
     <View style={styles.row}>
       <View style={styles.rowLeft}>

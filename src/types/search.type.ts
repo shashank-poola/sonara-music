@@ -18,3 +18,10 @@ export const SEARCH_TABS = [
   { key: "artists" as const, label: "Artists" },
   { key: "playlists" as const, label: "Playlists" },
 ];
+
+export const BROWSE_ITEMS = [
+    { label: "Songs", icon: "musical-notes" as const },
+    { label: "Albums", icon: "disc" as const },
+    { label: "Artists", icon: "mic" as const },
+    { label: "Playlists", icon: "folder-open" as const },
+];
