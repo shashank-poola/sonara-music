@@ -21,6 +21,24 @@ Sonara is a mobile music app where users can:
 ## Demo Video
 https://github.com/user-attachments/assets/fcc3fe19-ffed-47c2-9831-a6a270e0ec02
 
+## Demo Screenshots
+
+<p align="center">
+  <img src="./assets/demo/home-page.jpeg" alt="Home page" width="200" />
+  <img src="./assets/demo/home-songs.jpeg" alt="Songs screen" width="200" />
+  <img src="./assets/demo/home-artists.jpeg" alt="Artists screen" width="200" />
+  <img src="./assets/demo/home-albums.jpeg" alt="Albums screen" width="200" />
+  <img src="./assets/demo/home-playlists.jpeg" alt="Playlists screen" width="200" />
+  <img src="./assets/demo/home-mini-player.jpeg" alt="Mini player" width="200" />
+  <img src="./assets/demo/sonara-player.jpeg" alt="Player screen" width="200" />
+  <img src="./assets/demo/sonara-search.jpeg" alt="Search screen" width="200" />
+  <img src="./assets/demo/sonara-search-result.jpeg" alt="Search result screen" width="200" />
+  <img src="./assets/demo/player-queue.jpeg" alt="Queue screen" width="200" />
+  <img src="./assets/demo/sonara-new-playlist.jpeg" alt="New playlist screen" width="200" />
+  <img src="./assets/demo/sonara-settings.jpeg" alt="Settings screen" width="200" />
+</p>
+
+
 ## Setup
 
 **Prerequisites:** Node.js 18+, npm or yarn or bun 
