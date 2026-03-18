@@ -3,7 +3,6 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { PlayerHeaderProps } from "@/types/player.type";
 import { Colors } from "@/constants/theme";
 
-
 export function PlayerHeader({ albumName, onBack, onMore }: PlayerHeaderProps) {
   return (
     <View style={styles.header}>

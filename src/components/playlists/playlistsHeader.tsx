@@ -1,10 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/theme";
-
-type PlaylistsHeaderProps = {
-  onAddPress: () => void;
-};
+import { PlaylistsHeaderProps } from "@/types/playlists.type";
 
 export function PlaylistsHeader({ onAddPress }: PlaylistsHeaderProps) {
   return (

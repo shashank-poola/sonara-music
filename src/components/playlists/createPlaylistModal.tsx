@@ -1,21 +1,8 @@
 import { Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { Colors } from "@/constants/theme";
+import { CreatePlaylistModalProps } from "@/types/playlists.type";
 
-type CreatePlaylistModalProps = {
-  visible: boolean;
-  value: string;
-  onChangeText: (text: string) => void;
-  onClose: () => void;
-  onCreate: () => void;
-};
-
-export function CreatePlaylistModal({
-  visible,
-  value,
-  onChangeText,
-  onClose,
-  onCreate,
-}: CreatePlaylistModalProps) {
+export function CreatePlaylistModal({ visible, value, onChangeText, onClose, onCreate }: CreatePlaylistModalProps) {
   return (
     <Modal
       visible={visible}

@@ -2,11 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/theme";
 import type { SaavnSongSearchResult } from "@/types/saavn.type";
-
-type AddToPlaylistButtonProps = {
-  currentSong: SaavnSongSearchResult;
-  onPress: () => void;
-};
+import { AddToPlaylistButtonProps } from "@/types/playlists.type";
 
 export function AddToPlaylistButton({ currentSong, onPress }: AddToPlaylistButtonProps) {
   return (

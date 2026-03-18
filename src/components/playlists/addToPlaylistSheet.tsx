@@ -1,36 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import {
-  Modal,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/theme";
 import type { UserPlaylist } from "@/store/playlists-store";
 import type { SaavnSongSearchResult } from "@/types/saavn.type";
 import { pickBestImageUrl } from "@/types/saavn.type";
 import { getDisplayArtist } from "@/utils/artistDisplay";
+import { AddToPlaylistSheetProps } from "@/types/playlists.type";
 
-type AddToPlaylistSheetProps = {
-  visible: boolean;
-  currentSong: SaavnSongSearchResult | null;
-  playlists: UserPlaylist[];
-  onClose: () => void;
-  onAddToPlaylist: (playlistId: string) => void;
-  onCreatePlaylist: () => void;
-};
-
-export function AddToPlaylistSheet({
-  visible,
-  currentSong,
-  playlists,
-  onClose,
-  onAddToPlaylist,
-  onCreatePlaylist,
-}: AddToPlaylistSheetProps) {
+export function AddToPlaylistSheet({ visible, currentSong, playlists, onClose, onAddToPlaylist, onCreatePlaylist }: AddToPlaylistSheetProps) {
   return (
     <Modal
       visible={visible}

@@ -1,10 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/theme";
-
-type PlaylistsEmptyStateProps = {
-  onCreatePress: () => void;
-};
+import { PlaylistsEmptyStateProps } from "@/types/playlists.type";
 
 export function PlaylistsEmptyState({ onCreatePress }: PlaylistsEmptyStateProps) {
   return (

@@ -5,11 +5,7 @@ import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/theme";
 import type { UserPlaylist } from "@/store/playlists-store";
 import { pickBestImageUrl } from "@/types/saavn.type";
-
-type PlaylistsRowProps = {
-  playlist: UserPlaylist;
-  onDelete: () => void;
-};
+import { PlaylistsRowProps } from "@/types/playlists.type";
 
 export function PlaylistsRow({ playlist, onDelete }: PlaylistsRowProps) {
   const router = useRouter();
