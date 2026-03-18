@@ -18,6 +18,9 @@ Sonara is a mobile music app where users can:
 
 ---
 
+## Demo Video
+https://github.com/user-attachments/assets/fcc3fe19-ffed-47c2-9831-a6a270e0ec02
+
 ## Setup
 
 **Prerequisites:** Node.js 18+, npm or yarn or bun 
