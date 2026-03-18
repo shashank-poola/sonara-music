@@ -1,27 +1,11 @@
 import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import {
-  Dimensions,
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Dimensions, FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-import {
-  searchAlbums,
-  searchArtists,
-  searchPlaylists,
-  searchSongs,
-} from "@/api/saavn";
+import { searchAlbums, searchArtists, searchPlaylists, searchSongs } from "@/api/saavn";
 import { HomeAlbumCard } from "@/components/home/homeAlbumCard";
 import { HomeArtistCard } from "@/components/home/homeArtistCard";
-import {
-  HomeCategoryPills,
-  type HomeCategoryKey,
-} from "@/components/home/homeCategoryPills";
+import { HomeCategoryPills, type HomeCategoryKey } from "@/components/home/homeCategoryPills";
 import { HomeHeader } from "@/components/home/homeHeader";
 import { HomeLoaderError } from "@/components/home/homeLoaderError";
 import { HomePlaylistCard } from "@/components/home/homePlaylistCard";

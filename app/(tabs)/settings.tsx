@@ -1,12 +1,7 @@
-import {
-  Ionicons,
-  MaterialCommunityIcons,
-  MaterialIcons,
-} from "@expo/vector-icons";
 import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import { Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { SettingsBanner } from "@/components/settings/settingsBanner";
 import { SettingsFooter } from "@/components/settings/settingsFooter";
 import { SettingsHeader } from "@/components/settings/settingsHeader";

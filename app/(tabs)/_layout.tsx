@@ -16,11 +16,7 @@ const TABS: TabConfig[] = [
   { name: "settings", title: "Settings" },
 ];
 
-function TabIcon({
-  focused,
-  name,
-  size,
-}: {
+function TabIcon({ focused, name, size }: {
   focused: boolean;
   name: TabName;
   size: number;

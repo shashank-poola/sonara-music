@@ -2,7 +2,6 @@ import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import { CategoryPills } from "@/components/categoryPills";
 import { SearchAlbumRow, SearchArtistRow, SearchPlaylistRow, SearchSongRow } from "@/components/searchResultRow";
 import { SearchBrowseGrid } from "@/components/search/searchBrowseGrid";

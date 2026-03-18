@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { usePathname, useRouter } from "expo-router";
+import { Colors } from "@/constants/theme";
 
 export default function NotFound() {
   const pathname = usePathname();
@@ -14,7 +15,7 @@ export default function NotFound() {
     <View style={styles.container}>
       <Text style={styles.code}>404</Text>
       <Text style={styles.title}>Page not found</Text>
-      <TouchableOpacity onPress={() => router.replace("/(tabs)/home")} activeOpacity={0.7}>
+      <TouchableOpacity onPress={() => router.replace("/(tabs)/home/index")} activeOpacity={0.7}>
         <Text style={styles.link}>Return to Home</Text>
       </TouchableOpacity>
     </View>
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    color: "#A1A1AA",
+    color: Colors.background.app,
   },
   link: {
     marginTop: 8,

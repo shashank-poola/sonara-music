@@ -2,7 +2,6 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import { AddToPlaylistButton } from "@/components/playlists/addToPlaylistButton";
 import { AddToPlaylistSheet } from "@/components/playlists/addToPlaylistSheet";
 import { CreatePlaylistModal } from "@/components/playlists/createPlaylistModal";
