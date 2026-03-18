@@ -1,5 +1,7 @@
 import type { SaavnAlbumResult, SaavnArtistResult, SaavnPlaylistResult, SaavnSongSearchResult } from "@/types/saavn.type";
 
+export type SearchTab = "all" | "songs" | "albums" | "artists" | "playlists";
+
 export type SearchEmptyStateProps = {
     title: string;
     body: string;

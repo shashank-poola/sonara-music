@@ -1,19 +1,12 @@
-import {
-  searchAll,
-  searchAlbums,
-  searchArtists,
-  searchPlaylists,
-  searchSongs,
-} from "@/api/saavn";
+import { searchAll, searchAlbums, searchArtists, searchPlaylists, searchSongs } from "@/api/saavn";
 import { useCallback, useEffect, useState } from "react";
+import { SearchTab } from "@/types/search.type";
 import type {
   SaavnAlbumResult,
   SaavnArtistResult,
   SaavnPlaylistResult,
   SaavnSongSearchResult,
 } from "@/types/saavn.type";
-
-export type SearchTab = "all" | "songs" | "albums" | "artists" | "playlists";
 
 export function useSearch(debouncedQuery: string, activeTab: SearchTab) {
   const [songs, setSongs] = useState<SaavnSongSearchResult[]>([]);

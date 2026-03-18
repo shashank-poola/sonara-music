@@ -25,4 +25,12 @@ export const Colors = {
     progressActive: "#FFB5FF",
     progressInactive: "#374151",
   },
+  light: {
+    text: "#000000",
+    background: "#FFFFFF",
+  },
+  dark: {
+    text: "#FFFFFF",
+    background: "#000000",
+  },
 } as const;

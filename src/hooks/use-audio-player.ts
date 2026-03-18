@@ -2,10 +2,6 @@ import { useEffect, useRef } from "react";
 import { audioService } from "@/services/audio-service";
 import { usePlayerStore } from "@/store/player-store";
 
-/**
- * Mount this hook ONCE at the root layout.
- * It initialises the audio engine and reacts to currentSong changes.
- */
 export function useAudioPlayer() {
   const currentSong = usePlayerStore((s) => s.currentSong);
   const prevSongIdRef = useRef<string | null>(null);
