@@ -22,6 +22,8 @@ export default function RootLayout() {
             animation: "slide_from_bottom",
           }}
         />
+        <Stack.Screen name="album/[id]" />
+        <Stack.Screen name="playlist/[id]" />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="light" />

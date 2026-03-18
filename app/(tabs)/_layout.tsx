@@ -2,7 +2,7 @@ import { Feather, Ionicons, MaterialIcons, Octicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { MiniPlayer, TAB_BAR_HEIGHT } from "@/components/mini-player";
+import { MiniPlayer, TAB_BAR_HEIGHT } from "@/components/miniPlayer";
 import { Colors } from "@/constants/theme";
 
 type TabName = "home" | "search" | "playlists" | "settings";

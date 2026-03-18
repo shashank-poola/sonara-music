@@ -3,7 +3,7 @@ import type {
   SaavnAlbumDetailsResponse,
   SaavnArtistDetailsResponse,
   SaavnArtistSongsResponse,
-} from "@/types/saavn";
+} from "@/types/saavn.type";
 
 export function getArtistById(id: string) {
   return saavnGetJson<SaavnArtistDetailsResponse>(

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { SaavnSongSearchResult } from "@/types/saavn";
+import type { SaavnSongSearchResult } from "@/types/saavn.type";
 
 interface PlayerState {
   currentSong: SaavnSongSearchResult | null;

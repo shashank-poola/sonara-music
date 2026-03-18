@@ -1,8 +1,9 @@
 import { Audio, type AVPlaybackStatus } from "expo-av";
 import { usePlayerStore } from "@/store/player-store";
 import { useQueueStore } from "@/store/queue-store";
-import { pickBestStreamUrl } from "@/types/saavn";
-import type { SaavnSongSearchResult } from "@/types/saavn";
+import { pickBestStreamUrl } from "@/types/saavn.type";
+import type { SaavnSongSearchResult } from "@/types/saavn.type";
+import { getSongById } from "@/api/songs";
 
 // Singleton audio controller — import audioService anywhere to control playback.
 class AudioService {
@@ -41,7 +42,24 @@ class AudioService {
         this.sound = null;
       }
 
-      const streamUrl = pickBestStreamUrl(song.downloadUrl);
+      let songToPlay = song;
+      if (!pickBestStreamUrl(song.downloadUrl)) {
+        try {
+          const res = await getSongById(song.id);
+          const full = res.data?.[0];
+          if (full) {
+            songToPlay = {
+              ...song,
+              downloadUrl: full.downloadUrl,
+              image: full.image ?? song.image,
+            };
+          }
+        } catch (e) {
+          console.warn("[AudioService] Failed to fetch song details:", e);
+        }
+      }
+
+      const streamUrl = pickBestStreamUrl(songToPlay.downloadUrl);
       if (!streamUrl) {
         console.error("[AudioService] No stream URL for:", song.name);
         setIsLoading(false);

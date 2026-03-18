@@ -4,33 +4,46 @@ import { useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Dimensions,
   FlatList,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { searchSongs } from "@/api/saavn";
+import {
+  searchAlbums,
+  searchArtists,
+  searchPlaylists,
+  searchSongs,
+} from "@/api/saavn";
 import { Colors } from "@/constants/theme";
 import { usePlayerStore } from "@/store/player-store";
 import { useQueueStore } from "@/store/queue-store";
 import {
   formatDuration,
   pickBestImageUrl,
+  type SaavnAlbumResult,
+  type SaavnArtistResult,
+  type SaavnPlaylistResult,
   type SaavnSongSearchResult,
-} from "@/types/saavn";
+} from "@/types/saavn.type";
+import { getDisplayArtist, getDisplayArtistForAlbum } from "@/utils/artistDisplay";
 
-const DEFAULT_QUERY = "trending hindi";
-const PAGE_SIZE = 20;
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const TRENDING_CARD_WIDTH = Math.floor(SCREEN_WIDTH * 0.72);
+const HORIZONTAL_CARD_SIZE = 140;
+const CARD_GAP = 12;
 
 const CATEGORIES = [
-  { key: "all", label: "All", query: DEFAULT_QUERY },
-  { key: "songs", label: "Songs", query: "Songs" },
-  { key: "albums", label: "Album", query: "Albums" },
-  { key: "artists", label: "Artists", query: "Artists" },
-  { key: "playlists", label: "Playlists", query: "Playlists" },
+  { key: "all", label: "All" },
+  { key: "songs", label: "Songs" },
+  { key: "albums", label: "Album" },
+  { key: "artists", label: "Artists" },
+  { key: "playlists", label: "Playlists" },
 ] as const;
 
 type CategoryKey = (typeof CATEGORIES)[number]["key"];
@@ -38,12 +51,14 @@ type CategoryKey = (typeof CATEGORIES)[number]["key"];
 export default function HomeScreen() {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState<CategoryKey>("all");
-  const [activeQuery, setActiveQuery] = useState(DEFAULT_QUERY);
-  const [songs, setSongs] = useState<SaavnSongSearchResult[]>([]);
-  const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
+
+  const [trendingSongs, setTrendingSongs] = useState<SaavnSongSearchResult[]>([]);
+  const [albums, setAlbums] = useState<SaavnAlbumResult[]>([]);
+  const [artists, setArtists] = useState<SaavnArtistResult[]>([]);
+  const [playlists, setPlaylists] = useState<SaavnPlaylistResult[]>([]);
+  const [allSongs, setAllSongs] = useState<SaavnSongSearchResult[]>([]);
+
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const currentSongId = usePlayerStore((s) => s.currentSong?.id);
@@ -51,50 +66,154 @@ export default function HomeScreen() {
   const setCurrentSong = usePlayerStore((s) => s.setCurrentSong);
   const setQueue = useQueueStore((s) => s.setQueue);
 
-  const fetchSongs = useCallback(
-    async (q: string, p: number, replace: boolean) => {
-      try {
-        if (p === 1) setLoading(true);
-        else setLoadingMore(true);
-        setError(null);
-        const res = await searchSongs(q, { page: p, limit: PAGE_SIZE });
-        const results = res.data?.results ?? [];
-        setSongs((prev) => (replace ? results : [...prev, ...results]));
-        setTotal(res.data?.total ?? 0);
-        setPage(p);
-      } catch (e: unknown) {
-        setError(e instanceof Error ? e.message : "Failed to fetch songs");
-      } finally {
-        setLoading(false);
-        setLoadingMore(false);
+  const fetchHomeData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [songsRes, albumsRes, playlistsRes] = await Promise.all([
+        searchSongs("trending hindi", { page: 1, limit: 30 }),
+        searchAlbums("trending", { page: 1, limit: 20 }),
+        searchPlaylists("trending", { page: 1, limit: 20 }),
+      ]);
+      setTrendingSongs(songsRes.data?.results ?? []);
+      setAllSongs(songsRes.data?.results ?? []);
+      setAlbums(albumsRes.data?.results ?? []);
+      setPlaylists(playlistsRes.data?.results ?? []);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to load");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const fetchByCategory = useCallback(async (key: CategoryKey) => {
+    if (key === "all") {
+      fetchHomeData();
+      return;
+    }
+    try {
+      setLoading(true);
+      setError(null);
+      if (key === "songs") {
+        const res = await searchSongs("trending hindi", { page: 1, limit: 50 });
+        setAllSongs(res.data?.results ?? []);
+        setTrendingSongs([]);
+        setAlbums([]);
+        setArtists([]);
+        setPlaylists([]);
+      } else if (key === "albums") {
+        const res = await searchAlbums("trending", { page: 1, limit: 30 });
+        setAlbums(res.data?.results ?? []);
+        setTrendingSongs([]);
+        setAllSongs([]);
+        setArtists([]);
+        setPlaylists([]);
+      } else if (key === "artists") {
+        const res = await searchArtists("trending", { page: 1, limit: 30 });
+        setArtists(res.data?.results ?? []);
+        setTrendingSongs([]);
+        setAlbums([]);
+        setAllSongs([]);
+        setPlaylists([]);
+      } else {
+        const res = await searchPlaylists("trending", { page: 1, limit: 30 });
+        setPlaylists(res.data?.results ?? []);
+        setTrendingSongs([]);
+        setAlbums([]);
+        setArtists([]);
+        setAllSongs([]);
       }
-    },
-    []
-  );
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to load");
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchHomeData]);
 
   useEffect(() => {
-    fetchSongs(activeQuery, 1, true);
-  }, [activeQuery, fetchSongs]);
+    fetchByCategory(activeCategory);
+  }, [activeCategory, fetchByCategory]);
 
   const handleSelectCategory = (key: CategoryKey) => {
     setActiveCategory(key);
-    const next = CATEGORIES.find((c) => c.key === key)?.query ?? DEFAULT_QUERY;
-    setActiveQuery(next);
   };
 
-  const handleLoadMore = () => {
-    if (!loadingMore && songs.length < total) {
-      fetchSongs(activeQuery, page + 1, false);
-    }
-  };
-
-  const handlePlaySong = (song: SaavnSongSearchResult, index: number) => {
-    setQueue(songs, index);
+  const handlePlaySong = (list: SaavnSongSearchResult[], song: SaavnSongSearchResult, index: number) => {
+    setQueue(list, index);
     setCurrentSong(song);
     router.push("/player" as never);
   };
 
-  const renderSong = ({
+  const renderTrendingCard = ({ item, index }: { item: SaavnSongSearchResult; index: number }) => (
+    <Pressable
+      style={styles.trendingCard}
+      onPress={() => handlePlaySong(trendingSongs, item, index)}
+    >
+      <Image
+        source={{ uri: pickBestImageUrl(item.image, "500x500") }}
+        style={styles.trendingArt}
+        contentFit="cover"
+      />
+      <View style={styles.trendingOverlay}>
+        <Text style={styles.trendingTitle} numberOfLines={2}>
+          {item.name}
+        </Text>
+        <Text style={styles.trendingArtist} numberOfLines={1}>
+          {getDisplayArtist(item)}
+        </Text>
+      </View>
+    </Pressable>
+  );
+
+  const renderHorizontalAlbum = ({ item }: { item: SaavnAlbumResult }) => (
+    <Pressable style={styles.horizontalCard} onPress={() => router.push(`/album/${item.id}` as never)}>
+      <Image
+        source={{ uri: pickBestImageUrl(item.image, "300x300") }}
+        style={styles.horizontalArt}
+        contentFit="cover"
+      />
+      <Text style={styles.horizontalTitle} numberOfLines={2}>
+        {item.name}
+      </Text>
+      <Text style={styles.horizontalSub} numberOfLines={1}>
+        {getDisplayArtistForAlbum(item)}
+      </Text>
+    </Pressable>
+  );
+
+  const renderHorizontalPlaylist = ({ item }: { item: SaavnPlaylistResult }) => (
+    <Pressable style={styles.horizontalCard} onPress={() => router.push(`/playlist/${item.id}` as never)}>
+      <Image
+        source={{ uri: pickBestImageUrl(item.image, "300x300") }}
+        style={styles.horizontalArt}
+        contentFit="cover"
+      />
+      <Text style={styles.horizontalTitle} numberOfLines={2}>
+        {item.name}
+      </Text>
+      <Text style={styles.horizontalSub} numberOfLines={1}>
+        {item.songCount ? `${item.songCount} songs` : item.language || "Playlist"}
+      </Text>
+    </Pressable>
+  );
+
+  const renderHorizontalArtist = ({ item }: { item: SaavnArtistResult }) => (
+    <Pressable style={styles.horizontalCard} onPress={() => router.push(`/artist/${item.id}` as never)}>
+      <Image
+        source={{ uri: pickBestImageUrl(item.image, "300x300") }}
+        style={[styles.horizontalArt, styles.horizontalArtCircle]}
+        contentFit="cover"
+      />
+      <Text style={styles.horizontalTitle} numberOfLines={2}>
+        {item.name}
+      </Text>
+      <Text style={styles.horizontalSub} numberOfLines={1}>
+        {item.role || "Artist"}
+      </Text>
+    </Pressable>
+  );
+
+  const renderSongRow = ({
     item,
     index,
   }: {
@@ -109,7 +228,7 @@ export default function HomeScreen() {
           pressed && styles.songRowPressed,
           isActive && styles.songRowActive,
         ]}
-        onPress={() => handlePlaySong(item, index)}
+        onPress={() => handlePlaySong(allSongs, item, index)}
       >
         <Text style={[styles.songIndex, isActive && styles.songIndexActive]}>
           {isActive ? (
@@ -135,7 +254,7 @@ export default function HomeScreen() {
             {item.name}
           </Text>
           <Text style={styles.songArtist} numberOfLines={1}>
-            {item.primaryArtists || "Unknown artist"}
+            {getDisplayArtist(item)}
           </Text>
         </View>
         <View style={styles.songRight}>
@@ -154,6 +273,11 @@ export default function HomeScreen() {
     );
   };
 
+  const showSongsOnly = activeCategory === "songs";
+  const showAlbumsOnly = activeCategory === "albums";
+  const showArtistsOnly = activeCategory === "artists";
+  const showPlaylistsOnly = activeCategory === "playlists";
+
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
       {/* Header */}
@@ -170,7 +294,7 @@ export default function HomeScreen() {
         />
       </View>
 
-      {/* Category tabs */}
+      {/* Category pills */}
       <View style={styles.categoryRow}>
         {CATEGORIES.map((c) => {
           const selected = c.key === activeCategory;
@@ -193,62 +317,166 @@ export default function HomeScreen() {
         })}
       </View>
 
-      {/* Section header */}
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>
-          {activeQuery === DEFAULT_QUERY ? "Trending" : `"${activeQuery}"`}
-        </Text>
-        {total > 0 && (
-          <Text style={styles.totalText}>{total.toLocaleString()} songs</Text>
-        )}
-      </View>
-
-      {/* Content */}
       {loading ? (
         <View style={styles.loaderBox}>
           <ActivityIndicator color={Colors.button.primary} size="large" />
-          <Text style={styles.loadingText}>Loading songs…</Text>
+          <Text style={styles.loadingText}>Loading…</Text>
         </View>
       ) : error ? (
         <View style={styles.errorBox}>
           <Ionicons name="alert-circle" size={40} color={Colors.status.error} />
           <Text style={styles.errorText}>{error}</Text>
-          <Pressable
-            onPress={() => fetchSongs(activeQuery, 1, true)}
-            style={styles.retryBtn}
-          >
+          <Pressable onPress={() => fetchByCategory(activeCategory)} style={styles.retryBtn}>
             <Text style={styles.retryText}>Retry</Text>
           </Pressable>
         </View>
-      ) : (
+      ) : showSongsOnly ? (
         <FlatList
-          data={songs}
-          keyExtractor={(item) => item.id}
-          renderItem={renderSong}
+          data={allSongs}
+          keyExtractor={(i) => i.id}
+          renderItem={renderSongRow}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
-          onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.4}
           ItemSeparatorComponent={() => <View style={styles.divider} />}
-          ListFooterComponent={
-            loadingMore ? (
-              <ActivityIndicator
-                color={Colors.button.primary}
-                style={styles.footerLoader}
-              />
-            ) : null
-          }
+          ListHeaderComponent={<Text style={styles.sectionTitle}>Songs</Text>}
           ListEmptyComponent={
             <View style={styles.emptyBox}>
-              <Ionicons
-                name="musical-notes-outline"
-                size={48}
-                color={Colors.border.primary}
-              />
               <Text style={styles.emptyText}>No songs found</Text>
             </View>
           }
         />
+      ) : showAlbumsOnly ? (
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={styles.sectionTitle}>Albums</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.horizontalList}
+          >
+            {albums.map((item) => (
+              <View key={item.id}>
+                {renderHorizontalAlbum({ item })}
+              </View>
+            ))}
+          </ScrollView>
+        </ScrollView>
+      ) : showArtistsOnly ? (
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={styles.sectionTitle}>Artists</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.horizontalList}
+          >
+            {artists.map((item) => (
+              <View key={item.id}>
+                {renderHorizontalArtist({ item })}
+              </View>
+            ))}
+          </ScrollView>
+        </ScrollView>
+      ) : showPlaylistsOnly ? (
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={styles.sectionTitle}>Playlists</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.horizontalList}
+          >
+            {playlists.map((item) => (
+              <View key={item.id}>
+                {renderHorizontalPlaylist({ item })}
+              </View>
+            ))}
+          </ScrollView>
+        </ScrollView>
+      ) : (
+        <ScrollView
+          contentContainerStyle={styles.mainScroll}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Trending - big posters */}
+          {trendingSongs.length > 0 && (
+            <>
+              <Text style={styles.sectionTitle}>Popular & Trending</Text>
+              <ScrollView
+                horizontal
+                pagingEnabled={false}
+                snapToInterval={TRENDING_CARD_WIDTH + CARD_GAP}
+                snapToAlignment="start"
+                decelerationRate="fast"
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.trendingList}
+              >
+                {trendingSongs.slice(0, 10).map((item, i) => (
+                  <View key={item.id} style={styles.trendingCardWrap}>
+                    {renderTrendingCard({ item, index: i })}
+                  </View>
+                ))}
+              </ScrollView>
+            </>
+          )}
+
+          {/* Albums - horizontal rounded cards */}
+          {albums.length > 0 && (
+            <>
+              <Text style={styles.sectionTitle}>Albums</Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.horizontalList}
+              >
+                {albums.map((item) => (
+                  <View key={item.id}>
+                    {renderHorizontalAlbum({ item })}
+                  </View>
+                ))}
+              </ScrollView>
+            </>
+          )}
+
+          {/* Playlists - horizontal */}
+          {playlists.length > 0 && (
+            <>
+              <Text style={styles.sectionTitle}>Playlists</Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.horizontalList}
+              >
+                {playlists.map((item) => (
+                  <View key={item.id}>
+                    {renderHorizontalPlaylist({ item })}
+                  </View>
+                ))}
+              </ScrollView>
+            </>
+          )}
+
+          {/* All Songs - vertical list */}
+          {allSongs.length > 0 && (
+            <>
+              <Text style={styles.sectionTitle}>All Songs</Text>
+              <View style={styles.songsSection}>
+                {allSongs.map((item, index) => (
+                  <View key={item.id}>
+                    {renderSongRow({ item, index })}
+                    {index < allSongs.length - 1 ? <View style={styles.divider} /> : null}
+                  </View>
+                ))}
+              </View>
+            </>
+          )}
+        </ScrollView>
       )}
     </SafeAreaView>
   );
@@ -263,10 +491,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 14,
   },
-  logoImage: {
-    width: 112,
-    height: 28,
-  },
+  logoImage: { width: 112, height: 28 },
   categoryRow: {
     paddingHorizontal: 16,
     paddingBottom: 12,
@@ -287,28 +512,77 @@ const styles = StyleSheet.create({
     borderColor: Colors.button.primary,
   },
   categoryPillPressed: { opacity: 0.75 },
-  categoryText: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: Colors.text.primary,
-  },
-  categoryTextActive: {
-    color: Colors.button.text,
-  },
-  sectionHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 20,
-    paddingBottom: 8,
-  },
+  categoryText: { fontSize: 12, fontWeight: "700", color: Colors.text.primary },
+  categoryTextActive: { color: Colors.button.text },
+
   sectionTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "700",
     color: Colors.text.primary,
+    paddingHorizontal: 20,
+    marginBottom: 12,
   },
-  totalText: { fontSize: 12, color: Colors.text.muted },
-  list: { paddingHorizontal: 16, paddingBottom: 160 },
+
+  mainScroll: { paddingBottom: 180 },
+  scrollContent: { paddingBottom: 180 },
+
+  trendingList: {
+    paddingHorizontal: 20,
+    gap: CARD_GAP,
+    paddingBottom: 20,
+  },
+  trendingCardWrap: { width: TRENDING_CARD_WIDTH, marginRight: CARD_GAP },
+  trendingCard: {
+    width: TRENDING_CARD_WIDTH,
+    height: TRENDING_CARD_WIDTH,
+    borderRadius: 16,
+    overflow: "hidden",
+    backgroundColor: Colors.background.card,
+  },
+  trendingArt: {
+    width: "100%",
+    height: "100%",
+  },
+  trendingOverlay: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 14,
+    backgroundColor: "rgba(0,0,0,0.6)",
+  },
+  trendingTitle: { fontSize: 16, fontWeight: "700", color: "#FFF" },
+  trendingArtist: { fontSize: 13, color: Colors.text.muted, marginTop: 2 },
+
+  horizontalList: {
+    paddingHorizontal: 20,
+    gap: CARD_GAP,
+    paddingBottom: 20,
+  },
+  horizontalCard: { width: HORIZONTAL_CARD_SIZE },
+  horizontalArt: {
+    width: HORIZONTAL_CARD_SIZE,
+    height: HORIZONTAL_CARD_SIZE,
+    borderRadius: 12,
+    backgroundColor: Colors.background.card,
+  },
+  horizontalArtCircle: { borderRadius: HORIZONTAL_CARD_SIZE / 2 },
+  horizontalTitle: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: Colors.text.primary,
+    marginTop: 8,
+    maxWidth: HORIZONTAL_CARD_SIZE,
+  },
+  horizontalSub: {
+    fontSize: 11,
+    color: Colors.text.muted,
+    marginTop: 2,
+    maxWidth: HORIZONTAL_CARD_SIZE,
+  },
+
+  songsSection: { paddingHorizontal: 16, paddingBottom: 20 },
+  list: { paddingHorizontal: 16, paddingBottom: 180 },
   songRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -318,7 +592,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   songRowPressed: { opacity: 0.6 },
-  songRowActive: { backgroundColor: `${Colors.button.primary}10` },
+  songRowActive: { backgroundColor: `${Colors.button.primary}20` },
   songIndex: {
     width: 20,
     fontSize: 13,
@@ -343,6 +617,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.border.primary,
     opacity: 0.4,
   },
+
   loaderBox: {
     flex: 1,
     alignItems: "center",
@@ -381,5 +656,4 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   emptyText: { fontSize: 14, color: Colors.text.muted },
-  footerLoader: { marginVertical: 16 },
 });

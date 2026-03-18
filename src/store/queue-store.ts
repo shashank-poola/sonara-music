@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import type { SaavnSongSearchResult } from "@/types/saavn";
+import type { SaavnSongSearchResult } from "@/types/saavn.type";
 
 export type RepeatMode = "off" | "one" | "all";
 

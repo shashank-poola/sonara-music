@@ -1,5 +1,3 @@
-// ─── Shared primitives ───────────────────────────────────────────────────────
-
 export type SaavnImage = {
   quality: string;
   link?: string;
@@ -12,7 +10,7 @@ export type SaavnDownloadUrl = {
   url?: string;
 };
 
-// ─── Songs ────────────────────────────────────────────────────────────────────
+// Songs
 
 export type SaavnSongSearchResult = {
   id: string;
@@ -28,6 +26,9 @@ export type SaavnSongSearchResult = {
     id: string;
     name: string;
     url?: string;
+  };
+  artistMap?: {
+    artists?: { id: string; name: string; role?: string }[];
   };
 };
 
@@ -58,7 +59,7 @@ export type SaavnSongDetailsResponse = {
   data: SaavnSongDetails[];
 };
 
-// ─── Albums ───────────────────────────────────────────────────────────────────
+// Albums
 
 export type SaavnAlbumResult = {
   id: string;
@@ -99,7 +100,7 @@ export type SaavnAlbumDetailsResponse = {
   data: SaavnAlbumDetails;
 };
 
-// ─── Artists ──────────────────────────────────────────────────────────────────
+// Artists
 
 export type SaavnArtistResult = {
   id: string;
@@ -146,7 +147,7 @@ export type SaavnArtistSongsResponse = {
   };
 };
 
-// ─── Playlists ────────────────────────────────────────────────────────────────
+// Playlists
 
 export type SaavnPlaylistResult = {
   id: string;
@@ -167,7 +168,6 @@ export type SaavnSearchPlaylistsResponse = {
   };
 };
 
-// ─── Playlist details ────────────────────────────────────────────────────────
 
 export type SaavnPlaylistDetails = {
   id: string;
@@ -195,7 +195,6 @@ export type SaavnSearchAllResponse = {
   };
 };
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 export function pickBestImageUrl(images?: SaavnImage[], preferredQuality = "500x500") {
   if (!images || images.length === 0) return undefined;
@@ -213,7 +212,8 @@ export function pickBestStreamUrl(urls?: SaavnDownloadUrl[], preferredQuality = 
 
 export function formatDuration(seconds?: string | number): string {
   const s = typeof seconds === "string" ? parseInt(seconds, 10) : (seconds ?? 0);
-  const m = Math.floor(s / 60);
-  const rem = s % 60;
-  return `${m}:${rem.toString().padStart(2, "0")}`;
+  const totalSec = Math.floor(Number(s));
+  const m = Math.floor(totalSec / 60);
+  const sec = totalSec % 60;
+  return `${m}:${sec.toString().padStart(2, "0")}`;
 }

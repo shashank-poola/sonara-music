@@ -5,7 +5,7 @@ import type {
   SaavnSearchArtistsResponse,
   SaavnSearchPlaylistsResponse,
   SaavnSearchSongsResponse,
-} from "@/types/saavn";
+} from "@/types/saavn.type";
 
 type PaginationOpts = { page?: number; limit?: number };
 

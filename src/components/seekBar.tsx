@@ -84,14 +84,12 @@ export function SeekBar({
       onLayout={() => measureContainer()}
       {...panResponder.panHandlers}
     >
-      {/* Track background */}
       <View
         style={[
           styles.track,
           { height: trackHeight, marginVertical: verticalPad, backgroundColor: trackColor },
         ]}
       >
-        {/* Filled portion */}
         <View
           style={[
             styles.fill,
@@ -103,8 +101,6 @@ export function SeekBar({
           ]}
         />
       </View>
-
-      {/* Thumb */}
       <View
         style={[
           styles.thumb,
